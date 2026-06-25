@@ -4,13 +4,15 @@ All URIs are relative to *https://us1.pdfgeneratorapi.com/api/v4*
 
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
-| [**DeleteDocument**](DocumentsApi.md#deletedocument) | **DELETE** /documents/{publicId} | Delete document |
+| [**DeleteDocument**](DocumentsApi.md#deletedocument) | **DELETE** /documents/{publicId}/actions | Delete document |
 | [**GenerateDocument**](DocumentsApi.md#generatedocument) | **POST** /documents/generate | Generate document |
 | [**GenerateDocumentAsynchronous**](DocumentsApi.md#generatedocumentasynchronous) | **POST** /documents/generate/async | Generate document (async) |
 | [**GenerateDocumentBatch**](DocumentsApi.md#generatedocumentbatch) | **POST** /documents/generate/batch | Generate document (batch) |
 | [**GenerateDocumentBatchAsynchronous**](DocumentsApi.md#generatedocumentbatchasynchronous) | **POST** /documents/generate/batch/async | Generate document (batch + async) |
 | [**GetAsyncJobStatus**](DocumentsApi.md#getasyncjobstatus) | **GET** /documents/async/{jobId} | Get job status |
 | [**GetDocument**](DocumentsApi.md#getdocument) | **GET** /documents/{publicId} | Get document |
+| [**GetDocumentActions**](DocumentsApi.md#getdocumentactions) | **GET** /documents/{publicId}/actions | Get document actions |
+| [**GetDocumentVersions**](DocumentsApi.md#getdocumentversions) | **GET** /documents/{publicId}/versions | Get document versions |
 | [**GetDocuments**](DocumentsApi.md#getdocuments) | **GET** /documents | Get documents |
 | [**StoreDocument**](DocumentsApi.md#storedocument) | **POST** /documents | Store document |
 
@@ -102,7 +104,7 @@ Merges template with data and returns base64 encoded document or a public URL to
 
 <a id="generatedocumentasynchronous"></a>
 # **GenerateDocumentAsynchronous**
-> InlineObject20 GenerateDocumentAsynchronous (GenerateDocumentAsynchronousRequest generateDocumentAsynchronousRequest)
+> InlineObject22 GenerateDocumentAsynchronous (GenerateDocumentAsynchronousRequest generateDocumentAsynchronousRequest)
 
 Generate document (async)
 
@@ -117,7 +119,7 @@ Merges template with data as asynchronous job and makes POST request to callback
 
 ### Return type
 
-[**InlineObject20**](InlineObject20.md)
+[**InlineObject22**](InlineObject22.md)
 
 ### Authorization
 
@@ -188,7 +190,7 @@ Allows to merge multiple templates with data and returns base64 encoded document
 
 <a id="generatedocumentbatchasynchronous"></a>
 # **GenerateDocumentBatchAsynchronous**
-> InlineObject20 GenerateDocumentBatchAsynchronous (GenerateDocumentBatchAsynchronousRequest generateDocumentBatchAsynchronousRequest)
+> InlineObject22 GenerateDocumentBatchAsynchronous (GenerateDocumentBatchAsynchronousRequest generateDocumentBatchAsynchronousRequest)
 
 Generate document (batch + async)
 
@@ -203,7 +205,7 @@ Merges template with data as asynchronous job and makes POST request to callback
 
 ### Return type
 
-[**InlineObject20**](InlineObject20.md)
+[**InlineObject22**](InlineObject22.md)
 
 ### Authorization
 
@@ -305,6 +307,92 @@ Returns document stored in the Document Storage
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **200** | Document data |  -  |
+| **401** | Unauthorized |  -  |
+| **402** | Account Suspended |  -  |
+| **403** | Forbidden |  -  |
+| **404** | Not Found |  -  |
+| **422** | Unprocessable Entity |  -  |
+| **429** | Too Many Requests |  -  |
+| **500** | Internal Server Error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
+
+<a id="getdocumentactions"></a>
+# **GetDocumentActions**
+> InlineObject17 GetDocumentActions (string publicId)
+
+Get document actions
+
+Returns a list of actions performed on a stored document
+
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **publicId** | **string** | Resource public id |  |
+
+### Return type
+
+[**InlineObject17**](InlineObject17.md)
+
+### Authorization
+
+[JSONWebTokenAuth](../README.md#JSONWebTokenAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | A list of document actions |  -  |
+| **401** | Unauthorized |  -  |
+| **402** | Account Suspended |  -  |
+| **403** | Forbidden |  -  |
+| **404** | Not Found |  -  |
+| **422** | Unprocessable Entity |  -  |
+| **429** | Too Many Requests |  -  |
+| **500** | Internal Server Error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
+
+<a id="getdocumentversions"></a>
+# **GetDocumentVersions**
+> InlineObject16 GetDocumentVersions (string publicId)
+
+Get document versions
+
+Returns a list of versions for a stored document
+
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **publicId** | **string** | Resource public id |  |
+
+### Return type
+
+[**InlineObject16**](InlineObject16.md)
+
+### Authorization
+
+[JSONWebTokenAuth](../README.md#JSONWebTokenAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | A list of document versions |  -  |
 | **401** | Unauthorized |  -  |
 | **402** | Account Suspended |  -  |
 | **403** | Forbidden |  -  |

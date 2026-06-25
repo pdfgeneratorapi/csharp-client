@@ -18,7 +18,7 @@ All URIs are relative to *https://us1.pdfgeneratorapi.com/api/v4*
 
 <a id="copytemplate"></a>
 # **CopyTemplate**
-> InlineObject16 CopyTemplate (int templateId, CopyTemplateRequest copyTemplateRequest = null)
+> InlineObject18 CopyTemplate (int templateId, CopyTemplateRequest copyTemplateRequest = null)
 
 Copy template
 
@@ -34,7 +34,7 @@ Creates a copy of a template to the workspace specified in authentication parame
 
 ### Return type
 
-[**InlineObject16**](InlineObject16.md)
+[**InlineObject18**](InlineObject18.md)
 
 ### Authorization
 
@@ -62,7 +62,7 @@ Creates a copy of a template to the workspace specified in authentication parame
 
 <a id="createtemplate"></a>
 # **CreateTemplate**
-> InlineObject16 CreateTemplate (TemplateDefinitionNew templateDefinitionNew)
+> InlineObject18 CreateTemplate (TemplateDefinitionNew templateDefinitionNew)
 
 Create template
 
@@ -77,7 +77,7 @@ Creates a new template. If template configuration is not specified in the reques
 
 ### Return type
 
-[**InlineObject16**](InlineObject16.md)
+[**InlineObject18**](InlineObject18.md)
 
 ### Authorization
 
@@ -148,7 +148,7 @@ void (empty response body)
 
 <a id="gettemplate"></a>
 # **GetTemplate**
-> InlineObject16 GetTemplate (int templateId)
+> InlineObject18 GetTemplate (int templateId)
 
 Get template
 
@@ -163,7 +163,7 @@ Returns template configuration
 
 ### Return type
 
-[**InlineObject16**](InlineObject16.md)
+[**InlineObject18**](InlineObject18.md)
 
 ### Authorization
 
@@ -315,7 +315,7 @@ Returns a list of templates available for the authenticated workspace
 
 <a id="importtemplate"></a>
 # **ImportTemplate**
-> InlineObject16 ImportTemplate (ImportTemplateRequest importTemplateRequest)
+> InlineObject18 ImportTemplate (ImportTemplateRequest importTemplateRequest)
 
 Import template
 
@@ -330,7 +330,7 @@ Creates a template from existing PDF
 
 ### Return type
 
-[**InlineObject16**](InlineObject16.md)
+[**InlineObject18**](InlineObject18.md)
 
 ### Authorization
 
@@ -402,7 +402,7 @@ Returns an unique URL which you can use to redirect your user to the editor from
 
 <a id="updatetemplate"></a>
 # **UpdateTemplate**
-> InlineObject16 UpdateTemplate (int templateId, TemplateDefinitionNew templateDefinitionNew)
+> InlineObject18 UpdateTemplate (int templateId, TemplateDefinitionNew templateDefinitionNew)
 
 Update template
 
@@ -418,7 +418,7 @@ Updates template configuration. The template configuration for pages and layout 
 
 ### Return type
 
-[**InlineObject16**](InlineObject16.md)
+[**InlineObject18**](InlineObject18.md)
 
 ### Authorization
 

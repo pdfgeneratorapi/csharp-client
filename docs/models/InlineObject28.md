@@ -1,10 +1,10 @@
-# PDFGeneratorAPI.Client.Model.InlineObject20Response
+# PDFGeneratorAPI.Client.Model.InlineObject28
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**JobId** | **string** | Unique job id which is also added to the callback request as header PDF-API-Job-Id | [optional] 
+**Message** | **string** | Error description | [optional] 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
 

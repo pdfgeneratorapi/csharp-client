@@ -12,7 +12,7 @@
     <Description>C#/.NET wrapper for PDF Generator API</Description>
     <Copyright>No Copyright</Copyright>
     <RootNamespace>PDFGeneratorAPI.Client</RootNamespace>
-    <Version>8.0.25</Version>
+    <Version>8.0.26</Version>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\PDFGeneratorAPI.Client.xml</DocumentationFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/pdfgeneratorapi/csharp-client.git</RepositoryUrl>

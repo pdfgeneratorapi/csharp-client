@@ -16,7 +16,7 @@ All URIs are relative to *https://us1.pdfgeneratorapi.com/api/v4*
 
 <a id="createform"></a>
 # **CreateForm**
-> InlineObject17 CreateForm (FormConfigurationNew formConfigurationNew)
+> InlineObject19 CreateForm (FormConfigurationNew formConfigurationNew)
 
 Create form
 
@@ -31,7 +31,7 @@ Creates a new form based on the configuration sent in the request body.
 
 ### Return type
 
-[**InlineObject17**](InlineObject17.md)
+[**InlineObject19**](InlineObject19.md)
 
 ### Authorization
 
@@ -102,7 +102,7 @@ void (empty response body)
 
 <a id="getform"></a>
 # **GetForm**
-> InlineObject17 GetForm (int formId)
+> InlineObject19 GetForm (int formId)
 
 Get form
 
@@ -117,7 +117,7 @@ Returns form configuration
 
 ### Return type
 
-[**InlineObject17**](InlineObject17.md)
+[**InlineObject19**](InlineObject19.md)
 
 ### Authorization
 
@@ -189,7 +189,7 @@ Returns a list of forms available for the organization
 
 <a id="importform"></a>
 # **ImportForm**
-> InlineObject17 ImportForm (ImportFormRequest importFormRequest)
+> InlineObject19 ImportForm (ImportFormRequest importFormRequest)
 
 Import Form
 
@@ -204,7 +204,7 @@ Creates a new form based on editable PDF
 
 ### Return type
 
-[**InlineObject17**](InlineObject17.md)
+[**InlineObject19**](InlineObject19.md)
 
 ### Authorization
 
@@ -232,7 +232,7 @@ Creates a new form based on editable PDF
 
 <a id="openformbuilder"></a>
 # **OpenFormBuilder**
-> InlineObject19 OpenFormBuilder ()
+> InlineObject21 OpenFormBuilder ()
 
 Open new form builder
 
@@ -243,7 +243,7 @@ Creates a new Form Builder session and returns a URL that can be used to open th
 This endpoint does not need any parameter.
 ### Return type
 
-[**InlineObject19**](InlineObject19.md)
+[**InlineObject21**](InlineObject21.md)
 
 ### Authorization
 
@@ -271,7 +271,7 @@ This endpoint does not need any parameter.
 
 <a id="openformbuilderforexistingform"></a>
 # **OpenFormBuilderForExistingForm**
-> InlineObject19 OpenFormBuilderForExistingForm (int formId)
+> InlineObject21 OpenFormBuilderForExistingForm (int formId)
 
 Open existing form builder
 
@@ -286,7 +286,7 @@ Creates a Form Builder session for editing an existing form and returns a URL th
 
 ### Return type
 
-[**InlineObject19**](InlineObject19.md)
+[**InlineObject21**](InlineObject21.md)
 
 ### Authorization
 
@@ -314,7 +314,7 @@ Creates a Form Builder session for editing an existing form and returns a URL th
 
 <a id="shareform"></a>
 # **ShareForm**
-> InlineObject18 ShareForm (int formId)
+> InlineObject20 ShareForm (int formId)
 
 Share form
 
@@ -329,7 +329,7 @@ Creates an unique sharing URL to collect form data
 
 ### Return type
 
-[**InlineObject18**](InlineObject18.md)
+[**InlineObject20**](InlineObject20.md)
 
 ### Authorization
 
@@ -357,7 +357,7 @@ Creates an unique sharing URL to collect form data
 
 <a id="updateform"></a>
 # **UpdateForm**
-> InlineObject17 UpdateForm (int formId, FormConfigurationNew formConfigurationNew)
+> InlineObject19 UpdateForm (int formId, FormConfigurationNew formConfigurationNew)
 
 Update form
 
@@ -373,7 +373,7 @@ Updates the form configuration. The form configuration must be complete as the e
 
 ### Return type
 
-[**InlineObject17**](InlineObject17.md)
+[**InlineObject19**](InlineObject19.md)
 
 ### Authorization
 
