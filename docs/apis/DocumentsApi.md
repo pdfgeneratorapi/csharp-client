@@ -4,11 +4,12 @@ All URIs are relative to *https://us1.pdfgeneratorapi.com/api/v4*
 
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
-| [**DeleteDocument**](DocumentsApi.md#deletedocument) | **DELETE** /documents/{publicId}/actions | Delete document |
+| [**DeleteDocument**](DocumentsApi.md#deletedocument) | **DELETE** /documents/{publicId} | Delete document |
 | [**GenerateDocument**](DocumentsApi.md#generatedocument) | **POST** /documents/generate | Generate document |
 | [**GenerateDocumentAsynchronous**](DocumentsApi.md#generatedocumentasynchronous) | **POST** /documents/generate/async | Generate document (async) |
 | [**GenerateDocumentBatch**](DocumentsApi.md#generatedocumentbatch) | **POST** /documents/generate/batch | Generate document (batch) |
 | [**GenerateDocumentBatchAsynchronous**](DocumentsApi.md#generatedocumentbatchasynchronous) | **POST** /documents/generate/batch/async | Generate document (batch + async) |
+| [**GenerateViewerUrl**](DocumentsApi.md#generateviewerurl) | **POST** /documents/{publicId} | Get document with prefill |
 | [**GetAsyncJobStatus**](DocumentsApi.md#getasyncjobstatus) | **GET** /documents/async/{jobId} | Get job status |
 | [**GetDocument**](DocumentsApi.md#getdocument) | **GET** /documents/{publicId} | Get document |
 | [**GetDocumentActions**](DocumentsApi.md#getdocumentactions) | **GET** /documents/{publicId}/actions | Get document actions |
@@ -221,6 +222,51 @@ Merges template with data as asynchronous job and makes POST request to callback
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **201** | Async job response |  -  |
+| **401** | Unauthorized |  -  |
+| **402** | Account Suspended |  -  |
+| **403** | Forbidden |  -  |
+| **404** | Not Found |  -  |
+| **422** | Unprocessable Entity |  -  |
+| **429** | Too Many Requests |  -  |
+| **500** | Internal Server Error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
+
+<a id="generateviewerurl"></a>
+# **GenerateViewerUrl**
+> GenerateViewerUrl200Response GenerateViewerUrl (string publicId, GenerateViewerUrlRequest generateViewerUrlRequest = null)
+
+Get document with prefill
+
+Returns a URL for a stored document, optionally with viewer prefill data. The prefill is encrypted server-side and embedded in the viewer URL, so the caller does not have to handle encryption. Prefill is only applied when `output` is `viewer`. 
+
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **publicId** | **string** | Resource public id |  |
+| **generateViewerUrlRequest** | [**GenerateViewerUrlRequest**](GenerateViewerUrlRequest.md) | Optional response format and viewer prefill data. | [optional]  |
+
+### Return type
+
+[**GenerateViewerUrl200Response**](GenerateViewerUrl200Response.md)
+
+### Authorization
+
+[JSONWebTokenAuth](../README.md#JSONWebTokenAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Viewer URL response, returned when &#x60;output&#x60; is &#x60;viewer&#x60;. |  -  |
+| **201** | Document data |  -  |
 | **401** | Unauthorized |  -  |
 | **402** | Account Suspended |  -  |
 | **403** | Forbidden |  -  |

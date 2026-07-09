@@ -59,6 +59,9 @@ docs/models/GenerateDocumentRequest.md
 docs/models/GenerateQRCode201Response.md
 docs/models/GenerateQRCode201ResponseMeta.md
 docs/models/GenerateQRCodeRequest.md
+docs/models/GenerateViewerUrl200Response.md
+docs/models/GenerateViewerUrl200ResponseMeta.md
+docs/models/GenerateViewerUrlRequest.md
 docs/models/GetStatus200Response.md
 docs/models/GetTemplateLibrary200Response.md
 docs/models/GetTemplateVersion422Response.md
@@ -124,6 +127,7 @@ docs/models/OptimizeDocumentRequest.md
 docs/models/OptimizeUrl.md
 docs/models/OutputParam.md
 docs/models/PaginationMeta.md
+docs/models/PrefillParam.md
 docs/models/PromoteTemplateVersion200Response.md
 docs/models/PublicTemplateLibraryItem.md
 docs/models/StatusParam.md
@@ -215,6 +219,9 @@ src/PDFGeneratorAPI.Client.Test/Model/GenerateDocumentRequestTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/GenerateQRCode201ResponseMetaTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/GenerateQRCode201ResponseTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/GenerateQRCodeRequestTests.cs
+src/PDFGeneratorAPI.Client.Test/Model/GenerateViewerUrl200ResponseMetaTests.cs
+src/PDFGeneratorAPI.Client.Test/Model/GenerateViewerUrl200ResponseTests.cs
+src/PDFGeneratorAPI.Client.Test/Model/GenerateViewerUrlRequestTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/GetStatus200ResponseTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/GetTemplateLibrary200ResponseTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/GetTemplateVersion422ResponseTests.cs
@@ -280,6 +287,7 @@ src/PDFGeneratorAPI.Client.Test/Model/OptimizeDocumentRequestTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/OptimizeUrlTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/OutputParamTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/PaginationMetaTests.cs
+src/PDFGeneratorAPI.Client.Test/Model/PrefillParamTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/PromoteTemplateVersion200ResponseTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/PublicTemplateLibraryItemTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/StatusParamTests.cs
@@ -392,6 +400,9 @@ src/PDFGeneratorAPI.Client/Model/GenerateDocumentRequest.cs
 src/PDFGeneratorAPI.Client/Model/GenerateQRCode201Response.cs
 src/PDFGeneratorAPI.Client/Model/GenerateQRCode201ResponseMeta.cs
 src/PDFGeneratorAPI.Client/Model/GenerateQRCodeRequest.cs
+src/PDFGeneratorAPI.Client/Model/GenerateViewerUrl200Response.cs
+src/PDFGeneratorAPI.Client/Model/GenerateViewerUrl200ResponseMeta.cs
+src/PDFGeneratorAPI.Client/Model/GenerateViewerUrlRequest.cs
 src/PDFGeneratorAPI.Client/Model/GetStatus200Response.cs
 src/PDFGeneratorAPI.Client/Model/GetTemplateLibrary200Response.cs
 src/PDFGeneratorAPI.Client/Model/GetTemplateVersion422Response.cs
@@ -457,6 +468,7 @@ src/PDFGeneratorAPI.Client/Model/OptimizeDocumentRequest.cs
 src/PDFGeneratorAPI.Client/Model/OptimizeUrl.cs
 src/PDFGeneratorAPI.Client/Model/OutputParam.cs
 src/PDFGeneratorAPI.Client/Model/PaginationMeta.cs
+src/PDFGeneratorAPI.Client/Model/PrefillParam.cs
 src/PDFGeneratorAPI.Client/Model/PromoteTemplateVersion200Response.cs
 src/PDFGeneratorAPI.Client/Model/PublicTemplateLibraryItem.cs
 src/PDFGeneratorAPI.Client/Model/StatusParam.cs
