@@ -4,7 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Response** | [**FormConfiguration**](FormConfiguration.md) |  | [optional] 
+**Response** | [**TemplateDefinition**](TemplateDefinition.md) |  | [optional] 
+**Meta** | **Object** |  | [optional] 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
 

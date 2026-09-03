@@ -51,7 +51,7 @@ No authorization required
 
 <a id="gettemplatelibraryitem"></a>
 # **GetTemplateLibraryItem**
-> InlineObject18 GetTemplateLibraryItem (string publicId)
+> InlineObject19 GetTemplateLibraryItem (string publicId)
 
 Open template from the library
 
@@ -66,7 +66,7 @@ Returns the template definition for a public template identified by its `public_
 
 ### Return type
 
-[**InlineObject18**](InlineObject18.md)
+[**InlineObject19**](InlineObject19.md)
 
 ### Authorization
 

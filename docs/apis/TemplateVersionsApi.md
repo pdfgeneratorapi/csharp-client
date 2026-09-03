@@ -54,7 +54,7 @@ void (empty response body)
 
 <a id="gettemplateversion"></a>
 # **GetTemplateVersion**
-> InlineObject18 GetTemplateVersion (int templateId, int templateVersion)
+> InlineObject19 GetTemplateVersion (int templateId, int templateVersion)
 
 Get template version
 
@@ -70,7 +70,7 @@ Returns the template definition of the specified version.
 
 ### Return type
 
-[**InlineObject18**](InlineObject18.md)
+[**InlineObject19**](InlineObject19.md)
 
 ### Authorization
 

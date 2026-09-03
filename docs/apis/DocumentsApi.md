@@ -13,6 +13,7 @@ All URIs are relative to *https://us1.pdfgeneratorapi.com/api/v4*
 | [**GetAsyncJobStatus**](DocumentsApi.md#getasyncjobstatus) | **GET** /documents/async/{jobId} | Get job status |
 | [**GetDocument**](DocumentsApi.md#getdocument) | **GET** /documents/{publicId} | Get document |
 | [**GetDocumentActions**](DocumentsApi.md#getdocumentactions) | **GET** /documents/{publicId}/actions | Get document actions |
+| [**GetDocumentSignatures**](DocumentsApi.md#getdocumentsignatures) | **GET** /documents/{publicId}/signatures | Validate document signatures |
 | [**GetDocumentVersions**](DocumentsApi.md#getdocumentversions) | **GET** /documents/{publicId}/versions | Get document versions |
 | [**GetDocuments**](DocumentsApi.md#getdocuments) | **GET** /documents | Get documents |
 | [**StoreDocument**](DocumentsApi.md#storedocument) | **POST** /documents | Store document |
@@ -105,7 +106,7 @@ Merges template with data and returns base64 encoded document or a public URL to
 
 <a id="generatedocumentasynchronous"></a>
 # **GenerateDocumentAsynchronous**
-> InlineObject22 GenerateDocumentAsynchronous (GenerateDocumentAsynchronousRequest generateDocumentAsynchronousRequest)
+> InlineObject23 GenerateDocumentAsynchronous (GenerateDocumentAsynchronousRequest generateDocumentAsynchronousRequest)
 
 Generate document (async)
 
@@ -120,7 +121,7 @@ Merges template with data as asynchronous job and makes POST request to callback
 
 ### Return type
 
-[**InlineObject22**](InlineObject22.md)
+[**InlineObject23**](InlineObject23.md)
 
 ### Authorization
 
@@ -191,7 +192,7 @@ Allows to merge multiple templates with data and returns base64 encoded document
 
 <a id="generatedocumentbatchasynchronous"></a>
 # **GenerateDocumentBatchAsynchronous**
-> InlineObject22 GenerateDocumentBatchAsynchronous (GenerateDocumentBatchAsynchronousRequest generateDocumentBatchAsynchronousRequest)
+> InlineObject23 GenerateDocumentBatchAsynchronous (GenerateDocumentBatchAsynchronousRequest generateDocumentBatchAsynchronousRequest)
 
 Generate document (batch + async)
 
@@ -206,7 +207,7 @@ Merges template with data as asynchronous job and makes POST request to callback
 
 ### Return type
 
-[**InlineObject22**](InlineObject22.md)
+[**InlineObject23**](InlineObject23.md)
 
 ### Authorization
 
@@ -365,7 +366,7 @@ Returns document stored in the Document Storage
 
 <a id="getdocumentactions"></a>
 # **GetDocumentActions**
-> InlineObject17 GetDocumentActions (string publicId)
+> InlineObject18 GetDocumentActions (string publicId)
 
 Get document actions
 
@@ -380,7 +381,7 @@ Returns a list of actions performed on a stored document
 
 ### Return type
 
-[**InlineObject17**](InlineObject17.md)
+[**InlineObject18**](InlineObject18.md)
 
 ### Authorization
 
@@ -400,6 +401,51 @@ Returns a list of actions performed on a stored document
 | **402** | Account Suspended |  -  |
 | **403** | Forbidden |  -  |
 | **404** | Not Found |  -  |
+| **422** | Unprocessable Entity |  -  |
+| **429** | Too Many Requests |  -  |
+| **500** | Internal Server Error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
+
+<a id="getdocumentsignatures"></a>
+# **GetDocumentSignatures**
+> InlineObject17 GetDocumentSignatures (string publicId, string version = null)
+
+Validate document signatures
+
+Reports on every digital signature a stored document carries: who signed, when a timestamp authority attested it, whether the signed bytes are unchanged and whether the certificate chains to a trusted root.  Facts are reported separately from the verdict, because a reader and a validation library can disagree in both directions. `status` reduces them to one answer, worst case first.  Each request consumes one credit. A request that reports `unavailable` — signature validation not being enabled on the deployment — validates nothing and is not charged. 
+
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **publicId** | **string** | Resource public id |  |
+| **version** | **string** | Which stored version to report on. A version identifier reports on that version, &#x60;initial&#x60; on the document as first generated. Defaults to the latest version. A version is always reported on as itself: reporting the latest would describe bytes the caller is not holding.  | [optional]  |
+
+### Return type
+
+[**InlineObject17**](InlineObject17.md)
+
+### Authorization
+
+[JSONWebTokenAuth](../README.md#JSONWebTokenAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | What the document&#39;s signatures say |  -  |
+| **401** | Unauthorized |  -  |
+| **402** | Account Suspended |  -  |
+| **403** | Forbidden |  -  |
+| **404** | Not Found |  -  |
+| **410** | Gone |  -  |
 | **422** | Unprocessable Entity |  -  |
 | **429** | Too Many Requests |  -  |
 | **500** | Internal Server Error |  -  |

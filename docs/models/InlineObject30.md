@@ -1,10 +1,10 @@
-# PDFGeneratorAPI.Client.Model.InlineObject20Meta
+# PDFGeneratorAPI.Client.Model.InlineObject30
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**PublicId** | **string** | Form sharing unique identifier | [optional] 
+**Message** | **string** | Error description | [optional] 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
 

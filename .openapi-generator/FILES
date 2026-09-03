@@ -31,6 +31,8 @@ docs/models/CreateWorkspaceRequest.md
 docs/models/DataBatchInner.md
 docs/models/Document.md
 docs/models/DocumentAction.md
+docs/models/DocumentSignature.md
+docs/models/DocumentSignatures.md
 docs/models/DocumentUser.md
 docs/models/DocumentVersion.md
 docs/models/EncryptAndDecryptBase64.md
@@ -94,11 +96,11 @@ docs/models/InlineObject19.md
 docs/models/InlineObject1Response.md
 docs/models/InlineObject2.md
 docs/models/InlineObject20.md
-docs/models/InlineObject20Meta.md
 docs/models/InlineObject21.md
+docs/models/InlineObject21Meta.md
 docs/models/InlineObject22.md
-docs/models/InlineObject22Response.md
 docs/models/InlineObject23.md
+docs/models/InlineObject23Response.md
 docs/models/InlineObject24.md
 docs/models/InlineObject25.md
 docs/models/InlineObject26.md
@@ -106,6 +108,8 @@ docs/models/InlineObject27.md
 docs/models/InlineObject28.md
 docs/models/InlineObject29.md
 docs/models/InlineObject3.md
+docs/models/InlineObject30.md
+docs/models/InlineObject31.md
 docs/models/InlineObject4.md
 docs/models/InlineObject5.md
 docs/models/InlineObject6.md
@@ -190,6 +194,8 @@ src/PDFGeneratorAPI.Client.Test/Model/CreateFacturXEInvoiceRequestTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/CreateWorkspaceRequestTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/DataBatchInnerTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/DocumentActionTests.cs
+src/PDFGeneratorAPI.Client.Test/Model/DocumentSignatureTests.cs
+src/PDFGeneratorAPI.Client.Test/Model/DocumentSignaturesTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/DocumentTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/DocumentUserTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/DocumentVersionTests.cs
@@ -251,11 +257,11 @@ src/PDFGeneratorAPI.Client.Test/Model/InlineObject18Tests.cs
 src/PDFGeneratorAPI.Client.Test/Model/InlineObject19Tests.cs
 src/PDFGeneratorAPI.Client.Test/Model/InlineObject1ResponseTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/InlineObject1Tests.cs
-src/PDFGeneratorAPI.Client.Test/Model/InlineObject20MetaTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/InlineObject20Tests.cs
+src/PDFGeneratorAPI.Client.Test/Model/InlineObject21MetaTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/InlineObject21Tests.cs
-src/PDFGeneratorAPI.Client.Test/Model/InlineObject22ResponseTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/InlineObject22Tests.cs
+src/PDFGeneratorAPI.Client.Test/Model/InlineObject23ResponseTests.cs
 src/PDFGeneratorAPI.Client.Test/Model/InlineObject23Tests.cs
 src/PDFGeneratorAPI.Client.Test/Model/InlineObject24Tests.cs
 src/PDFGeneratorAPI.Client.Test/Model/InlineObject25Tests.cs
@@ -264,6 +270,8 @@ src/PDFGeneratorAPI.Client.Test/Model/InlineObject27Tests.cs
 src/PDFGeneratorAPI.Client.Test/Model/InlineObject28Tests.cs
 src/PDFGeneratorAPI.Client.Test/Model/InlineObject29Tests.cs
 src/PDFGeneratorAPI.Client.Test/Model/InlineObject2Tests.cs
+src/PDFGeneratorAPI.Client.Test/Model/InlineObject30Tests.cs
+src/PDFGeneratorAPI.Client.Test/Model/InlineObject31Tests.cs
 src/PDFGeneratorAPI.Client.Test/Model/InlineObject3Tests.cs
 src/PDFGeneratorAPI.Client.Test/Model/InlineObject4Tests.cs
 src/PDFGeneratorAPI.Client.Test/Model/InlineObject5Tests.cs
@@ -372,6 +380,8 @@ src/PDFGeneratorAPI.Client/Model/CreateWorkspaceRequest.cs
 src/PDFGeneratorAPI.Client/Model/DataBatchInner.cs
 src/PDFGeneratorAPI.Client/Model/Document.cs
 src/PDFGeneratorAPI.Client/Model/DocumentAction.cs
+src/PDFGeneratorAPI.Client/Model/DocumentSignature.cs
+src/PDFGeneratorAPI.Client/Model/DocumentSignatures.cs
 src/PDFGeneratorAPI.Client/Model/DocumentUser.cs
 src/PDFGeneratorAPI.Client/Model/DocumentVersion.cs
 src/PDFGeneratorAPI.Client/Model/EncryptAndDecryptBase64.cs
@@ -435,11 +445,11 @@ src/PDFGeneratorAPI.Client/Model/InlineObject19.cs
 src/PDFGeneratorAPI.Client/Model/InlineObject1Response.cs
 src/PDFGeneratorAPI.Client/Model/InlineObject2.cs
 src/PDFGeneratorAPI.Client/Model/InlineObject20.cs
-src/PDFGeneratorAPI.Client/Model/InlineObject20Meta.cs
 src/PDFGeneratorAPI.Client/Model/InlineObject21.cs
+src/PDFGeneratorAPI.Client/Model/InlineObject21Meta.cs
 src/PDFGeneratorAPI.Client/Model/InlineObject22.cs
-src/PDFGeneratorAPI.Client/Model/InlineObject22Response.cs
 src/PDFGeneratorAPI.Client/Model/InlineObject23.cs
+src/PDFGeneratorAPI.Client/Model/InlineObject23Response.cs
 src/PDFGeneratorAPI.Client/Model/InlineObject24.cs
 src/PDFGeneratorAPI.Client/Model/InlineObject25.cs
 src/PDFGeneratorAPI.Client/Model/InlineObject26.cs
@@ -447,6 +457,8 @@ src/PDFGeneratorAPI.Client/Model/InlineObject27.cs
 src/PDFGeneratorAPI.Client/Model/InlineObject28.cs
 src/PDFGeneratorAPI.Client/Model/InlineObject29.cs
 src/PDFGeneratorAPI.Client/Model/InlineObject3.cs
+src/PDFGeneratorAPI.Client/Model/InlineObject30.cs
+src/PDFGeneratorAPI.Client/Model/InlineObject31.cs
 src/PDFGeneratorAPI.Client/Model/InlineObject4.cs
 src/PDFGeneratorAPI.Client/Model/InlineObject5.cs
 src/PDFGeneratorAPI.Client/Model/InlineObject6.cs
