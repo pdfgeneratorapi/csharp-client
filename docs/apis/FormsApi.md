@@ -7,6 +7,7 @@ All URIs are relative to *https://us1.pdfgeneratorapi.com/api/v4*
 | [**CreateForm**](FormsApi.md#createform) | **POST** /forms | Create form |
 | [**DeleteForm**](FormsApi.md#deleteform) | **DELETE** /forms/{formId} | Delete form |
 | [**GetForm**](FormsApi.md#getform) | **GET** /forms/{formId} | Get form |
+| [**GetFormSchema**](FormsApi.md#getformschema) | **GET** /forms/schema | Get schema |
 | [**GetForms**](FormsApi.md#getforms) | **GET** /forms | Get forms |
 | [**ImportForm**](FormsApi.md#importform) | **POST** /forms/import | Import Form |
 | [**OpenFormBuilder**](FormsApi.md#openformbuilder) | **POST** /forms/open | Open new form builder |
@@ -143,9 +144,43 @@ Returns form configuration
 
 [[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
 
+<a id="getformschema"></a>
+# **GetFormSchema**
+> Object GetFormSchema ()
+
+Get schema
+
+Returns Form JSON Schema which defines the structure of the Form Definition.
+
+
+### Parameters
+This endpoint does not need any parameter.
+### Return type
+
+**Object**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Form JSON Schema |  -  |
+| **429** | Too Many Requests |  -  |
+| **500** | Internal Server Error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
+
 <a id="getforms"></a>
 # **GetForms**
-> InlineObject6 GetForms (int page = null, int perPage = null)
+> InlineObject6 GetForms (int page = null, int perPage = null, string orderBy = null, string orderDirection = null, string search = null)
 
 Get forms
 
@@ -158,6 +193,9 @@ Returns a list of forms available for the organization
 |------|------|-------------|-------|
 | **page** | **int** | Pagination: page to return | [optional] [default to 1] |
 | **perPage** | **int** | Pagination: How many records to return per page | [optional] [default to 15] |
+| **orderBy** | **string** | Field to sort the forms by | [optional] [default to id] |
+| **orderDirection** | **string** | Sort direction | [optional] [default to desc] |
+| **search** | **string** | Returns forms whose name or ID contains the search value | [optional]  |
 
 ### Return type
 
@@ -193,7 +231,7 @@ Returns a list of forms available for the organization
 
 Import Form
 
-Creates a new form based on editable PDF
+Creates a new form based on editable PDF. Form fields are created from the editable fields of the PDF. The optional `form` object sets the form name, template, actions and configuration.
 
 
 ### Parameters
@@ -258,7 +296,7 @@ This endpoint does not need any parameter.
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **201** | Form Builder URL |  -  |
+| **200** | Form Builder URL |  -  |
 | **401** | Unauthorized |  -  |
 | **402** | Account Suspended |  -  |
 | **403** | Forbidden |  -  |
@@ -301,7 +339,7 @@ Creates a Form Builder session for editing an existing form and returns a URL th
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **201** | Form Builder URL |  -  |
+| **200** | Form Builder URL |  -  |
 | **401** | Unauthorized |  -  |
 | **402** | Account Suspended |  -  |
 | **403** | Forbidden |  -  |

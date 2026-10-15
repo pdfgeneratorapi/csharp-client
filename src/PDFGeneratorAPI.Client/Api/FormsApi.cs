@@ -4,7 +4,7 @@
  *
  * # Introduction [PDF Generator API](https://pdfgeneratorapi.com) allows you easily generate transactional PDF documents and reduce the development and support costs by enabling your users to create and manage their document templates using a browser-based drag-and-drop document editor.  The PDF Generator API features a web API architecture, allowing you to code in the language of your choice. This API supports the JSON media type, and uses UTF-8 character encoding.  ## Base URL The base URL for all the API endpoints is `https://us1.pdfgeneratorapi.com/api/v4`  For example * `https://us1.pdfgeneratorapi.com/api/v4/templates` * `https://us1.pdfgeneratorapi.com/api/v4/workspaces` * `https://us1.pdfgeneratorapi.com/api/v4/templates/123123`  ## Editor PDF Generator API comes with a powerful drag & drop editor that allows to create any kind of document templates, from barcode labels to invoices, quotes and reports. You can find tutorials and videos from our [Support Portal](https://support.pdfgeneratorapi.com). * [Component specification](https://support.pdfgeneratorapi.com/en/category/components-1ffseaj/) * [Expression Language documentation](https://support.pdfgeneratorapi.com/en/category/expression-language-q203pa/) * [Frequently asked questions and answers](https://support.pdfgeneratorapi.com/en/category/qanda-1ov519d/)  ## Definitions  ### Organization Organization is a group of workspaces owned by your account.  ### Workspace Workspace contains templates. Each workspace has access to their own templates and organization default templates.  ### Master Workspace Master Workspace is the main/default workspace of your Organization. The Master Workspace identifier is the email you signed up with.  ### Default Template Default template is a template that is available for all workspaces by default. You can set the template access type under Page Setup. If template has \"Organization\" access then your users can use them from the \"New\" menu in the Editor.  ### Data Field Data Field is a placeholder for the specific data in your JSON data set. In this example JSON you can access the buyer name using Data Field `{paymentDetails::buyerName}`. The separator between depth levels is :: (two colons). When designing the template you don’t have to know every Data Field, our editor automatically extracts all the available fields from your data set and provides an easy way to insert them into the template. ``` {     \"documentNumber\": 1,     \"paymentDetails\": {         \"method\": \"Credit Card\",         \"buyerName\": \"John Smith\"     },     \"items\": [         {             \"id\": 1,             \"name\": \"Item one\"         }     ] } ```  ## Rate limiting Our API endpoints use IP-based rate limiting and allow you to make up to 2 requests per second and 60 requests per minute. If you make more requests, you will receive a response with HTTP code 429.  Response headers contain additional values:  | Header   | Description                    | |- -- -- -- -|- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -| | X-RateLimit-Limit    | Maximum requests per minute                   | | X-RateLimit-Remaining    | The requests remaining in the current minute               | | Retry-After     | How many seconds you need to wait until you are allowed to make requests |  *  *  *  *  *  # Libraries and SDKs ## Postman Collection We have created a [Postman Collection](https://www.postman.com/pdfgeneratorapi/workspace/pdf-generator-api-public-workspace/overview) so you can easily test all the API endpoints without developing and code.   ## Client Libraries All our Client Libraries are auto-generated using [OpenAPI Generator](https://openapi-generator.tech/) which uses the OpenAPI v3 specification to automatically generate a client library in specific programming language.  * [PHP Client](https://github.com/pdfgeneratorapi/php-client) * [Java Client](https://github.com/pdfgeneratorapi/java-client) * [Ruby Client](https://github.com/pdfgeneratorapi/ruby-client) * [Python Client](https://github.com/pdfgeneratorapi/python-client) * [Javascript Client](https://github.com/pdfgeneratorapi/javascript-client)  We have validated the generated libraries, but let us know if you find any anomalies in the client code.  ## Model Context Protocol (MCP) Server Integrate document generation directly into your AI agents and LLM applications using our official Model Context Protocol (MCP) Server.  The MCP server provides a standardized interface that allows AI assistants (like Claude Desktop and other MCP-compatible clients) to securely interact with the PDF Generator API. With it, your AI applications can automatically fetch workspaces, retrieve templates, merge data, and generate PDF documents on the fly.  [Get PDF Generator API MCP Server](https://github.com/pdfgeneratorapi/mcp-server) *  *  *  *  *   # Authentication The PDF Generator API uses __JSON Web Tokens (JWT)__ to authenticate all API requests. These tokens offer a method to establish secure server-to-server authentication by transferring a compact JSON object with a signed payload of your account’s API Key and Secret. When authenticating to the PDF Generator API, a JWT should be generated uniquely by a __server-side application__ and included as a __Bearer Token__ in the header of each request.   <SecurityDefinitions />  ## Accessing your API Key and Secret You can find your __API Key__ and __API Secret__ from the __Account Settings__ page after you login to PDF Generator API [here](https://pdfgeneratorapi.com/login).  ## Creating a JWT JSON Web Tokens are composed of three sections: a header, a payload (containing a claim set), and a signature. The header and payload are JSON objects, which are serialized to UTF-8 bytes, then encoded using base64url encoding.  The JWT's header, payload, and signature are concatenated with periods (.). As a result, a JWT typically takes the following form: ``` {Base64url encoded header}.{Base64url encoded payload}.{Base64url encoded signature} ```  We recommend and support libraries provided on [jwt.io](https://jwt.io/). While other libraries can create JWT, these recommended libraries are the most robust.  ### Header Property `alg` defines which signing algorithm is being used. PDF Generator API users HS256. Property `typ` defines the type of token and it is always JWT. ``` {   \"alg\": \"HS256\",   \"typ\": \"JWT\" } ```  ### Payload The second part of the token is the payload, which contains the claims  or the pieces of information being passed about the user and any metadata required. It is mandatory to specify the following claims: * issuer (`iss`): Your API key * subject (`sub`): Workspace identifier * expiration time (`exp`): Timestamp (unix epoch time) until the token is valid. It is highly recommended to set the exp timestamp for a short period, i.e. a matter of seconds. This way, if a token is intercepted or shared, the token will only be valid for a short period of time.  ``` {   \"iss\": \"ad54aaff89ffdfeff178bb8a8f359b29fcb20edb56250b9f584aa2cb0162ed4a\",   \"sub\": \"demo.example@actualreports.com\",   \"exp\": 1586112639 } ```  ### Payload for Partners Our partners can send their unique identifier (provided by us) in JWT's partner_id claim. If the `partner_id` value is specified in the JWT, the organization making the request is automatically connected to the partner account. * Partner ID (`partner_id`): Unique identifier provide by PDF Generator API team  ``` {   \"iss\": \"ad54aaff89ffdfeff178bb8a8f359b29fcb20edb56250b9f584aa2cb0162ed4a\",   \"sub\": \"demo.example@actualreports.com\",   \"partner_id\": \"my-partner-identifier\",   \"exp\": 1586112639 } ```  ### Signature To create the signature part you have to take the encoded header, the encoded payload, a secret, the algorithm specified in the header, and sign that. The signature is used to verify the message wasn't changed along the way, and, in the case of tokens signed with a private key, it can also verify that the sender of the JWT is who it says it is. ``` HMACSHA256(     base64UrlEncode(header) + \".\" +     base64UrlEncode(payload),     API_SECRET) ```  ### Putting all together The output is three Base64-URL strings separated by dots. The following shows a JWT that has the previous header and payload encoded, and it is signed with a secret. ``` eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhZDU0YWFmZjg5ZmZkZmVmZjE3OGJiOGE4ZjM1OWIyOWZjYjIwZWRiNTYyNTBiOWY1ODRhYTJjYjAxNjJlZDRhIiwic3ViIjoiZGVtby5leGFtcGxlQGFjdHVhbHJlcG9ydHMuY29tIn0.SxO-H7UYYYsclS8RGWO1qf0z1cB1m73wF9FLl9RCc1Q  // Base64 encoded header: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9 // Base64 encoded payload: eyJpc3MiOiJhZDU0YWFmZjg5ZmZkZmVmZjE3OGJiOGE4ZjM1OWIyOWZjYjIwZWRiNTYyNTBiOWY1ODRhYTJjYjAxNjJlZDRhIiwic3ViIjoiZGVtby5leGFtcGxlQGFjdHVhbHJlcG9ydHMuY29tIn0 // Signature: SxO-H7UYYYsclS8RGWO1qf0z1cB1m73wF9FLl9RCc1Q ```  ## Temporary JWTs You can create a temporary token in [Account Settings](https://pdfgeneratorapi.com/account/organization) page after you login to PDF Generator API. The generated token uses your email address as the subject (`sub`) value and is valid for __15 minutes__. You can also use [jwt.io](https://jwt.io/) to generate test tokens for your API calls. These test tokens should never be used in production applications. *  *  *  *  *  # Error codes  | Code   | Description                    | |- -- -- -- -|- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -| | 401    | Unauthorized                   | | 402    | Payment Required               | | 403    | Forbidden                      | | 404    | Not Found                      | | 422    | Unprocessable Entity           | | 429    | Too Many Requests              | | 500    | Internal Server Error          |  ## 401 Unauthorized | Description                                                             | |- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --| | Authentication failed: request expired                                  | | Authentication failed: workspace missing                                | | Authentication failed: key missing                                      | | Authentication failed: property 'iss' (issuer) missing in JWT           | | Authentication failed: property 'sub' (subject) missing in JWT          | | Authentication failed: property 'exp' (expiration time) missing in JWT  | | Authentication failed: incorrect signature                              |  ## 402 Payment Required | Description                                                             | |- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --| | Your account is suspended, please upgrade your account                  |  ## 403 Forbidden | Description                                                             | |- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --| | Your account has exceeded the monthly document generation limit.        | | Access not granted: You cannot delete master workspace via API          | | Access not granted: Template is not accessible by this organization     | | Your session has expired, please close and reopen the editor.           |  ## 404 Entity not found | Description                                                             | |- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --| | Entity not found                                                        | | Resource not found                                                      | | None of the templates is available for the workspace.                   |  ## 422 Unprocessable Entity | Description                                                             | |- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --| | Unable to parse JSON, please check formatting                           | | Required parameter missing                                              | | Required parameter missing: template definition not defined             | | Required parameter missing: template not defined                        |  ## 429 Too Many Requests | Description                                                             | |- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --| | You can make up to 2 requests per second and 60 requests per minute.   |  *  *  *  *  * 
  *
- * The version of the OpenAPI document: 4.0.29
+ * The version of the OpenAPI document: 4.0.31
  * Contact: support@pdfgeneratorapi.com
  * Generated by: https://github.com/openapitools/openapi-generator.git
  */
@@ -106,6 +106,27 @@ namespace PDFGeneratorAPI.Client.Api
         Task<IGetFormApiResponse?> GetFormOrDefaultAsync(int formId, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Get schema
+        /// </summary>
+        /// <remarks>
+        /// Returns Form JSON Schema which defines the structure of the Form Definition.
+        /// </remarks>
+        /// <exception cref="ApiException">Thrown when fails to make API call</exception>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns><see cref="Task"/>&lt;<see cref="IGetFormSchemaApiResponse"/>&gt;</returns>
+        Task<IGetFormSchemaApiResponse> GetFormSchemaAsync(System.Threading.CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Get schema
+        /// </summary>
+        /// <remarks>
+        /// Returns Form JSON Schema which defines the structure of the Form Definition.
+        /// </remarks>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns><see cref="Task"/>&lt;<see cref="IGetFormSchemaApiResponse"/>?&gt;</returns>
+        Task<IGetFormSchemaApiResponse?> GetFormSchemaOrDefaultAsync(System.Threading.CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Get forms
         /// </summary>
         /// <remarks>
@@ -114,9 +135,12 @@ namespace PDFGeneratorAPI.Client.Api
         /// <exception cref="ApiException">Thrown when fails to make API call</exception>
         /// <param name="page">Pagination: page to return (optional, default to 1)</param>
         /// <param name="perPage">Pagination: How many records to return per page (optional, default to 15)</param>
+        /// <param name="orderBy">Field to sort the forms by (optional, default to id)</param>
+        /// <param name="orderDirection">Sort direction (optional, default to desc)</param>
+        /// <param name="search">Returns forms whose name or ID contains the search value (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns><see cref="Task"/>&lt;<see cref="IGetFormsApiResponse"/>&gt;</returns>
-        Task<IGetFormsApiResponse> GetFormsAsync(Option<int> page = default, Option<int> perPage = default, System.Threading.CancellationToken cancellationToken = default);
+        Task<IGetFormsApiResponse> GetFormsAsync(Option<int> page = default, Option<int> perPage = default, Option<string> orderBy = default, Option<string> orderDirection = default, Option<string> search = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get forms
@@ -126,15 +150,18 @@ namespace PDFGeneratorAPI.Client.Api
         /// </remarks>
         /// <param name="page">Pagination: page to return (optional, default to 1)</param>
         /// <param name="perPage">Pagination: How many records to return per page (optional, default to 15)</param>
+        /// <param name="orderBy">Field to sort the forms by (optional, default to id)</param>
+        /// <param name="orderDirection">Sort direction (optional, default to desc)</param>
+        /// <param name="search">Returns forms whose name or ID contains the search value (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns><see cref="Task"/>&lt;<see cref="IGetFormsApiResponse"/>?&gt;</returns>
-        Task<IGetFormsApiResponse?> GetFormsOrDefaultAsync(Option<int> page = default, Option<int> perPage = default, System.Threading.CancellationToken cancellationToken = default);
+        Task<IGetFormsApiResponse?> GetFormsOrDefaultAsync(Option<int> page = default, Option<int> perPage = default, Option<string> orderBy = default, Option<string> orderDirection = default, Option<string> search = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Import Form
         /// </summary>
         /// <remarks>
-        /// Creates a new form based on editable PDF
+        /// Creates a new form based on editable PDF. Form fields are created from the editable fields of the PDF. The optional &#x60;form&#x60; object sets the form name, template, actions and configuration.
         /// </remarks>
         /// <exception cref="ApiException">Thrown when fails to make API call</exception>
         /// <param name="importFormRequest">Import editable PDF via URL or base64 string as form</param>
@@ -146,7 +173,7 @@ namespace PDFGeneratorAPI.Client.Api
         /// Import Form
         /// </summary>
         /// <remarks>
-        /// Creates a new form based on editable PDF
+        /// Creates a new form based on editable PDF. Form fields are created from the editable fields of the PDF. The optional &#x60;form&#x60; object sets the form name, template, actions and configuration.
         /// </remarks>
         /// <param name="importFormRequest">Import editable PDF via URL or base64 string as form</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -409,6 +436,30 @@ namespace PDFGeneratorAPI.Client.Api
     }
 
     /// <summary>
+    /// The <see cref="IGetFormSchemaApiResponse"/>
+    /// </summary>
+    public interface IGetFormSchemaApiResponse : PDFGeneratorAPI.Client.Client.IApiResponse, IOk<Object?>, ITooManyRequests<PDFGeneratorAPI.Client.Model.InlineObject30?>, IInternalServerError<PDFGeneratorAPI.Client.Model.InlineObject31?>
+    {
+        /// <summary>
+        /// Returns true if the response is 200 Ok
+        /// </summary>
+        /// <returns></returns>
+        bool IsOk { get; }
+
+        /// <summary>
+        /// Returns true if the response is 429 TooManyRequests
+        /// </summary>
+        /// <returns></returns>
+        bool IsTooManyRequests { get; }
+
+        /// <summary>
+        /// Returns true if the response is 500 InternalServerError
+        /// </summary>
+        /// <returns></returns>
+        bool IsInternalServerError { get; }
+    }
+
+    /// <summary>
     /// The <see cref="IGetFormsApiResponse"/>
     /// </summary>
     public interface IGetFormsApiResponse : PDFGeneratorAPI.Client.Client.IApiResponse, IOk<PDFGeneratorAPI.Client.Model.InlineObject6?>, IUnauthorized<PDFGeneratorAPI.Client.Model.InlineObject24?>, IPaymentRequired<PDFGeneratorAPI.Client.Model.InlineObject25?>, IForbidden<PDFGeneratorAPI.Client.Model.InlineObject26?>, INotFound<PDFGeneratorAPI.Client.Model.InlineObject27?>, IUnprocessableContent<PDFGeneratorAPI.Client.Model.InlineObject29?>, ITooManyRequests<PDFGeneratorAPI.Client.Model.InlineObject30?>, IInternalServerError<PDFGeneratorAPI.Client.Model.InlineObject31?>
@@ -519,13 +570,13 @@ namespace PDFGeneratorAPI.Client.Api
     /// <summary>
     /// The <see cref="IOpenFormBuilderApiResponse"/>
     /// </summary>
-    public interface IOpenFormBuilderApiResponse : PDFGeneratorAPI.Client.Client.IApiResponse, ICreated<PDFGeneratorAPI.Client.Model.InlineObject22?>, IUnauthorized<PDFGeneratorAPI.Client.Model.InlineObject24?>, IPaymentRequired<PDFGeneratorAPI.Client.Model.InlineObject25?>, IForbidden<PDFGeneratorAPI.Client.Model.InlineObject26?>, INotFound<PDFGeneratorAPI.Client.Model.InlineObject27?>, IUnprocessableContent<PDFGeneratorAPI.Client.Model.InlineObject29?>, ITooManyRequests<PDFGeneratorAPI.Client.Model.InlineObject30?>, IInternalServerError<PDFGeneratorAPI.Client.Model.InlineObject31?>
+    public interface IOpenFormBuilderApiResponse : PDFGeneratorAPI.Client.Client.IApiResponse, IOk<PDFGeneratorAPI.Client.Model.InlineObject22?>, IUnauthorized<PDFGeneratorAPI.Client.Model.InlineObject24?>, IPaymentRequired<PDFGeneratorAPI.Client.Model.InlineObject25?>, IForbidden<PDFGeneratorAPI.Client.Model.InlineObject26?>, INotFound<PDFGeneratorAPI.Client.Model.InlineObject27?>, IUnprocessableContent<PDFGeneratorAPI.Client.Model.InlineObject29?>, ITooManyRequests<PDFGeneratorAPI.Client.Model.InlineObject30?>, IInternalServerError<PDFGeneratorAPI.Client.Model.InlineObject31?>
     {
         /// <summary>
-        /// Returns true if the response is 201 Created
+        /// Returns true if the response is 200 Ok
         /// </summary>
         /// <returns></returns>
-        bool IsCreated { get; }
+        bool IsOk { get; }
 
         /// <summary>
         /// Returns true if the response is 401 Unauthorized
@@ -573,13 +624,13 @@ namespace PDFGeneratorAPI.Client.Api
     /// <summary>
     /// The <see cref="IOpenFormBuilderForExistingFormApiResponse"/>
     /// </summary>
-    public interface IOpenFormBuilderForExistingFormApiResponse : PDFGeneratorAPI.Client.Client.IApiResponse, ICreated<PDFGeneratorAPI.Client.Model.InlineObject22?>, IUnauthorized<PDFGeneratorAPI.Client.Model.InlineObject24?>, IPaymentRequired<PDFGeneratorAPI.Client.Model.InlineObject25?>, IForbidden<PDFGeneratorAPI.Client.Model.InlineObject26?>, INotFound<PDFGeneratorAPI.Client.Model.InlineObject27?>, IUnprocessableContent<PDFGeneratorAPI.Client.Model.InlineObject29?>, ITooManyRequests<PDFGeneratorAPI.Client.Model.InlineObject30?>, IInternalServerError<PDFGeneratorAPI.Client.Model.InlineObject31?>
+    public interface IOpenFormBuilderForExistingFormApiResponse : PDFGeneratorAPI.Client.Client.IApiResponse, IOk<PDFGeneratorAPI.Client.Model.InlineObject22?>, IUnauthorized<PDFGeneratorAPI.Client.Model.InlineObject24?>, IPaymentRequired<PDFGeneratorAPI.Client.Model.InlineObject25?>, IForbidden<PDFGeneratorAPI.Client.Model.InlineObject26?>, INotFound<PDFGeneratorAPI.Client.Model.InlineObject27?>, IUnprocessableContent<PDFGeneratorAPI.Client.Model.InlineObject29?>, ITooManyRequests<PDFGeneratorAPI.Client.Model.InlineObject30?>, IInternalServerError<PDFGeneratorAPI.Client.Model.InlineObject31?>
     {
         /// <summary>
-        /// Returns true if the response is 201 Created
+        /// Returns true if the response is 200 Ok
         /// </summary>
         /// <returns></returns>
-        bool IsCreated { get; }
+        bool IsOk { get; }
 
         /// <summary>
         /// Returns true if the response is 401 Unauthorized
@@ -795,6 +846,26 @@ namespace PDFGeneratorAPI.Client.Api
         internal void ExecuteOnErrorGetForm(Exception exception)
         {
             OnErrorGetForm?.Invoke(this, new ExceptionEventArgs(exception));
+        }
+
+        /// <summary>
+        /// The event raised after the server response
+        /// </summary>
+        public event EventHandler<ApiResponseEventArgs>? OnGetFormSchema;
+
+        /// <summary>
+        /// The event raised after an error querying the server
+        /// </summary>
+        public event EventHandler<ExceptionEventArgs>? OnErrorGetFormSchema;
+
+        internal void ExecuteOnGetFormSchema(FormsApi.GetFormSchemaApiResponse apiResponse)
+        {
+            OnGetFormSchema?.Invoke(this, new ApiResponseEventArgs(apiResponse));
+        }
+
+        internal void ExecuteOnErrorGetFormSchema(Exception exception)
+        {
+            OnErrorGetFormSchema?.Invoke(this, new ExceptionEventArgs(exception));
         }
 
         /// <summary>
@@ -2410,7 +2481,298 @@ namespace PDFGeneratorAPI.Client.Api
             partial void OnDeserializationError(ref bool suppressDefaultLog, Exception exception, HttpStatusCode httpStatusCode);
         }
 
-        partial void FormatGetForms(ref Option<int> page, ref Option<int> perPage);
+        /// <summary>
+        /// Processes the server response
+        /// </summary>
+        /// <param name="apiResponseLocalVar"></param>
+        private void AfterGetFormSchemaDefaultImplementation(IGetFormSchemaApiResponse apiResponseLocalVar)
+        {
+            bool suppressDefaultLog = false;
+            AfterGetFormSchema(ref suppressDefaultLog, apiResponseLocalVar);
+            if (!suppressDefaultLog)
+                Logger.LogInformation("{0,-9} | {1} | {3}", (apiResponseLocalVar.DownloadedAt - apiResponseLocalVar.RequestedAt).TotalSeconds, apiResponseLocalVar.StatusCode, apiResponseLocalVar.Path);
+        }
+
+        /// <summary>
+        /// Processes the server response
+        /// </summary>
+        /// <param name="suppressDefaultLog"></param>
+        /// <param name="apiResponseLocalVar"></param>
+        partial void AfterGetFormSchema(ref bool suppressDefaultLog, IGetFormSchemaApiResponse apiResponseLocalVar);
+
+        /// <summary>
+        /// Logs exceptions that occur while retrieving the server response
+        /// </summary>
+        /// <param name="exceptionLocalVar"></param>
+        /// <param name="pathFormatLocalVar"></param>
+        /// <param name="pathLocalVar"></param>
+        private void OnErrorGetFormSchemaDefaultImplementation(Exception exceptionLocalVar, string pathFormatLocalVar, string pathLocalVar)
+        {
+            bool suppressDefaultLogLocalVar = false;
+            OnErrorGetFormSchema(ref suppressDefaultLogLocalVar, exceptionLocalVar, pathFormatLocalVar, pathLocalVar);
+            if (!suppressDefaultLogLocalVar)
+                Logger.LogError(exceptionLocalVar, "An error occurred while sending the request to the server.");
+        }
+
+        /// <summary>
+        /// A partial method that gives developers a way to provide customized exception handling
+        /// </summary>
+        /// <param name="suppressDefaultLogLocalVar"></param>
+        /// <param name="exceptionLocalVar"></param>
+        /// <param name="pathFormatLocalVar"></param>
+        /// <param name="pathLocalVar"></param>
+        partial void OnErrorGetFormSchema(ref bool suppressDefaultLogLocalVar, Exception exceptionLocalVar, string pathFormatLocalVar, string pathLocalVar);
+
+        /// <summary>
+        /// Get schema Returns Form JSON Schema which defines the structure of the Form Definition.
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns><see cref="Task"/>&lt;<see cref="IGetFormSchemaApiResponse"/>&gt;</returns>
+        public async Task<IGetFormSchemaApiResponse?> GetFormSchemaOrDefaultAsync(System.Threading.CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                return await GetFormSchemaAsync(cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Get schema Returns Form JSON Schema which defines the structure of the Form Definition.
+        /// </summary>
+        /// <exception cref="ApiException">Thrown when fails to make API call</exception>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns><see cref="Task"/>&lt;<see cref="IGetFormSchemaApiResponse"/>&gt;</returns>
+        public async Task<IGetFormSchemaApiResponse> GetFormSchemaAsync(System.Threading.CancellationToken cancellationToken = default)
+        {
+            UriBuilder uriBuilderLocalVar = new UriBuilder();
+
+            try
+            {
+                using (HttpRequestMessage httpRequestMessageLocalVar = new HttpRequestMessage())
+                {
+                    uriBuilderLocalVar.Host = HttpClient.BaseAddress!.Host;
+                    uriBuilderLocalVar.Port = HttpClient.BaseAddress.Port;
+                    uriBuilderLocalVar.Scheme = HttpClient.BaseAddress.Scheme;
+                    uriBuilderLocalVar.Path = HttpClient.BaseAddress.AbsolutePath == "/"
+                        ? "/forms/schema"
+                        : string.Concat(HttpClient.BaseAddress.AbsolutePath, "/forms/schema");
+
+                    httpRequestMessageLocalVar.RequestUri = uriBuilderLocalVar.Uri;
+
+                    string[] acceptLocalVars = new string[] {
+                        "application/json"
+                    };
+
+                    string? acceptLocalVar = ClientUtils.SelectHeaderAccept(acceptLocalVars);
+
+                    if (acceptLocalVar != null)
+                        httpRequestMessageLocalVar.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(acceptLocalVar));
+
+                    httpRequestMessageLocalVar.Method = HttpMethod.Get;
+
+                    DateTime requestedAtLocalVar = DateTime.UtcNow;
+
+                    using (HttpResponseMessage httpResponseMessageLocalVar = await HttpClient.SendAsync(httpRequestMessageLocalVar, cancellationToken).ConfigureAwait(false))
+                    {
+                        string responseContentLocalVar = await httpResponseMessageLocalVar.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+
+                        ILogger<GetFormSchemaApiResponse> apiResponseLoggerLocalVar = LoggerFactory.CreateLogger<GetFormSchemaApiResponse>();
+
+                        GetFormSchemaApiResponse apiResponseLocalVar = new(apiResponseLoggerLocalVar, httpRequestMessageLocalVar, httpResponseMessageLocalVar, responseContentLocalVar, "/forms/schema", requestedAtLocalVar, _jsonSerializerOptions);
+
+                        AfterGetFormSchemaDefaultImplementation(apiResponseLocalVar);
+
+                        Events.ExecuteOnGetFormSchema(apiResponseLocalVar);
+
+                        return apiResponseLocalVar;
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                OnErrorGetFormSchemaDefaultImplementation(e, "/forms/schema", uriBuilderLocalVar.Path);
+                Events.ExecuteOnErrorGetFormSchema(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// The <see cref="GetFormSchemaApiResponse"/>
+        /// </summary>
+        public partial class GetFormSchemaApiResponse : PDFGeneratorAPI.Client.Client.ApiResponse, IGetFormSchemaApiResponse
+        {
+            /// <summary>
+            /// The logger
+            /// </summary>
+            public ILogger<GetFormSchemaApiResponse> Logger { get; }
+
+            /// <summary>
+            /// The <see cref="GetFormSchemaApiResponse"/>
+            /// </summary>
+            /// <param name="logger"></param>
+            /// <param name="httpRequestMessage"></param>
+            /// <param name="httpResponseMessage"></param>
+            /// <param name="rawContent"></param>
+            /// <param name="path"></param>
+            /// <param name="requestedAt"></param>
+            /// <param name="jsonSerializerOptions"></param>
+            public GetFormSchemaApiResponse(ILogger<GetFormSchemaApiResponse> logger, System.Net.Http.HttpRequestMessage httpRequestMessage, System.Net.Http.HttpResponseMessage httpResponseMessage, string rawContent, string path, DateTime requestedAt, System.Text.Json.JsonSerializerOptions jsonSerializerOptions) : base(httpRequestMessage, httpResponseMessage, rawContent, path, requestedAt, jsonSerializerOptions)
+            {
+                Logger = logger;
+                OnCreated(httpRequestMessage, httpResponseMessage);
+            }
+
+            partial void OnCreated(global::System.Net.Http.HttpRequestMessage httpRequestMessage, System.Net.Http.HttpResponseMessage httpResponseMessage);
+
+            /// <summary>
+            /// Returns true if the response is 200 Ok
+            /// </summary>
+            /// <returns></returns>
+            public bool IsOk => 200 == (int)StatusCode;
+
+            /// <summary>
+            /// Deserializes the response if the response is 200 Ok
+            /// </summary>
+            /// <returns></returns>
+            public Object? Ok()
+            {
+                // This logic may be modified with the AsModel.mustache template
+                return IsOk
+                    ? System.Text.Json.JsonSerializer.Deserialize<Object>(RawContent, _jsonSerializerOptions)
+                    : null;
+            }
+
+            /// <summary>
+            /// Returns true if the response is 200 Ok and the deserialized response is not null
+            /// </summary>
+            /// <param name="result"></param>
+            /// <returns></returns>
+            public bool TryOk([NotNullWhen(true)]out Object? result)
+            {
+                result = null;
+
+                try
+                {
+                    result = Ok();
+                } catch (Exception e)
+                {
+                    OnDeserializationErrorDefaultImplementation(e, (HttpStatusCode)200);
+                }
+
+                return result != null;
+            }
+
+            /// <summary>
+            /// Returns true if the response is 429 TooManyRequests
+            /// </summary>
+            /// <returns></returns>
+            public bool IsTooManyRequests => 429 == (int)StatusCode;
+
+            /// <summary>
+            /// Deserializes the response if the response is 429 TooManyRequests
+            /// </summary>
+            /// <returns></returns>
+            public PDFGeneratorAPI.Client.Model.InlineObject30? TooManyRequests()
+            {
+                // This logic may be modified with the AsModel.mustache template
+                return IsTooManyRequests
+                    ? System.Text.Json.JsonSerializer.Deserialize<PDFGeneratorAPI.Client.Model.InlineObject30>(RawContent, _jsonSerializerOptions)
+                    : null;
+            }
+
+            /// <summary>
+            /// Returns true if the response is 429 TooManyRequests and the deserialized response is not null
+            /// </summary>
+            /// <param name="result"></param>
+            /// <returns></returns>
+            public bool TryTooManyRequests([NotNullWhen(true)]out PDFGeneratorAPI.Client.Model.InlineObject30? result)
+            {
+                result = null;
+
+                try
+                {
+                    result = TooManyRequests();
+                } catch (Exception e)
+                {
+                    OnDeserializationErrorDefaultImplementation(e, (HttpStatusCode)429);
+                }
+
+                return result != null;
+            }
+
+            /// <summary>
+            /// Returns true if the response is 500 InternalServerError
+            /// </summary>
+            /// <returns></returns>
+            public bool IsInternalServerError => 500 == (int)StatusCode;
+
+            /// <summary>
+            /// Deserializes the response if the response is 500 InternalServerError
+            /// </summary>
+            /// <returns></returns>
+            public PDFGeneratorAPI.Client.Model.InlineObject31? InternalServerError()
+            {
+                // This logic may be modified with the AsModel.mustache template
+                return IsInternalServerError
+                    ? System.Text.Json.JsonSerializer.Deserialize<PDFGeneratorAPI.Client.Model.InlineObject31>(RawContent, _jsonSerializerOptions)
+                    : null;
+            }
+
+            /// <summary>
+            /// Returns true if the response is 500 InternalServerError and the deserialized response is not null
+            /// </summary>
+            /// <param name="result"></param>
+            /// <returns></returns>
+            public bool TryInternalServerError([NotNullWhen(true)]out PDFGeneratorAPI.Client.Model.InlineObject31? result)
+            {
+                result = null;
+
+                try
+                {
+                    result = InternalServerError();
+                } catch (Exception e)
+                {
+                    OnDeserializationErrorDefaultImplementation(e, (HttpStatusCode)500);
+                }
+
+                return result != null;
+            }
+
+            private void OnDeserializationErrorDefaultImplementation(Exception exception, HttpStatusCode httpStatusCode)
+            {
+                bool suppressDefaultLog = false;
+                OnDeserializationError(ref suppressDefaultLog, exception, httpStatusCode);
+                if (!suppressDefaultLog)
+                    Logger.LogError(exception, "An error occurred while deserializing the {code} response.", httpStatusCode);
+            }
+
+            partial void OnDeserializationError(ref bool suppressDefaultLog, Exception exception, HttpStatusCode httpStatusCode);
+        }
+
+        partial void FormatGetForms(ref Option<int> page, ref Option<int> perPage, ref Option<string> orderBy, ref Option<string> orderDirection, ref Option<string> search);
+
+        /// <summary>
+        /// Validates the request parameters
+        /// </summary>
+        /// <param name="orderBy"></param>
+        /// <param name="orderDirection"></param>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        private void ValidateGetForms(Option<string> orderBy, Option<string> orderDirection, Option<string> search)
+        {
+            if (orderBy.IsSet && orderBy.Value == null)
+                throw new ArgumentNullException(nameof(orderBy));
+
+            if (orderDirection.IsSet && orderDirection.Value == null)
+                throw new ArgumentNullException(nameof(orderDirection));
+
+            if (search.IsSet && search.Value == null)
+                throw new ArgumentNullException(nameof(search));
+        }
 
         /// <summary>
         /// Processes the server response
@@ -2418,10 +2780,13 @@ namespace PDFGeneratorAPI.Client.Api
         /// <param name="apiResponseLocalVar"></param>
         /// <param name="page"></param>
         /// <param name="perPage"></param>
-        private void AfterGetFormsDefaultImplementation(IGetFormsApiResponse apiResponseLocalVar, Option<int> page, Option<int> perPage)
+        /// <param name="orderBy"></param>
+        /// <param name="orderDirection"></param>
+        /// <param name="search"></param>
+        private void AfterGetFormsDefaultImplementation(IGetFormsApiResponse apiResponseLocalVar, Option<int> page, Option<int> perPage, Option<string> orderBy, Option<string> orderDirection, Option<string> search)
         {
             bool suppressDefaultLog = false;
-            AfterGetForms(ref suppressDefaultLog, apiResponseLocalVar, page, perPage);
+            AfterGetForms(ref suppressDefaultLog, apiResponseLocalVar, page, perPage, orderBy, orderDirection, search);
             if (!suppressDefaultLog)
                 Logger.LogInformation("{0,-9} | {1} | {3}", (apiResponseLocalVar.DownloadedAt - apiResponseLocalVar.RequestedAt).TotalSeconds, apiResponseLocalVar.StatusCode, apiResponseLocalVar.Path);
         }
@@ -2433,7 +2798,10 @@ namespace PDFGeneratorAPI.Client.Api
         /// <param name="apiResponseLocalVar"></param>
         /// <param name="page"></param>
         /// <param name="perPage"></param>
-        partial void AfterGetForms(ref bool suppressDefaultLog, IGetFormsApiResponse apiResponseLocalVar, Option<int> page, Option<int> perPage);
+        /// <param name="orderBy"></param>
+        /// <param name="orderDirection"></param>
+        /// <param name="search"></param>
+        partial void AfterGetForms(ref bool suppressDefaultLog, IGetFormsApiResponse apiResponseLocalVar, Option<int> page, Option<int> perPage, Option<string> orderBy, Option<string> orderDirection, Option<string> search);
 
         /// <summary>
         /// Logs exceptions that occur while retrieving the server response
@@ -2443,10 +2811,13 @@ namespace PDFGeneratorAPI.Client.Api
         /// <param name="pathLocalVar"></param>
         /// <param name="page"></param>
         /// <param name="perPage"></param>
-        private void OnErrorGetFormsDefaultImplementation(Exception exceptionLocalVar, string pathFormatLocalVar, string pathLocalVar, Option<int> page, Option<int> perPage)
+        /// <param name="orderBy"></param>
+        /// <param name="orderDirection"></param>
+        /// <param name="search"></param>
+        private void OnErrorGetFormsDefaultImplementation(Exception exceptionLocalVar, string pathFormatLocalVar, string pathLocalVar, Option<int> page, Option<int> perPage, Option<string> orderBy, Option<string> orderDirection, Option<string> search)
         {
             bool suppressDefaultLogLocalVar = false;
-            OnErrorGetForms(ref suppressDefaultLogLocalVar, exceptionLocalVar, pathFormatLocalVar, pathLocalVar, page, perPage);
+            OnErrorGetForms(ref suppressDefaultLogLocalVar, exceptionLocalVar, pathFormatLocalVar, pathLocalVar, page, perPage, orderBy, orderDirection, search);
             if (!suppressDefaultLogLocalVar)
                 Logger.LogError(exceptionLocalVar, "An error occurred while sending the request to the server.");
         }
@@ -2460,20 +2831,26 @@ namespace PDFGeneratorAPI.Client.Api
         /// <param name="pathLocalVar"></param>
         /// <param name="page"></param>
         /// <param name="perPage"></param>
-        partial void OnErrorGetForms(ref bool suppressDefaultLogLocalVar, Exception exceptionLocalVar, string pathFormatLocalVar, string pathLocalVar, Option<int> page, Option<int> perPage);
+        /// <param name="orderBy"></param>
+        /// <param name="orderDirection"></param>
+        /// <param name="search"></param>
+        partial void OnErrorGetForms(ref bool suppressDefaultLogLocalVar, Exception exceptionLocalVar, string pathFormatLocalVar, string pathLocalVar, Option<int> page, Option<int> perPage, Option<string> orderBy, Option<string> orderDirection, Option<string> search);
 
         /// <summary>
         /// Get forms Returns a list of forms available for the organization
         /// </summary>
         /// <param name="page">Pagination: page to return (optional, default to 1)</param>
         /// <param name="perPage">Pagination: How many records to return per page (optional, default to 15)</param>
+        /// <param name="orderBy">Field to sort the forms by (optional, default to id)</param>
+        /// <param name="orderDirection">Sort direction (optional, default to desc)</param>
+        /// <param name="search">Returns forms whose name or ID contains the search value (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns><see cref="Task"/>&lt;<see cref="IGetFormsApiResponse"/>&gt;</returns>
-        public async Task<IGetFormsApiResponse?> GetFormsOrDefaultAsync(Option<int> page = default, Option<int> perPage = default, System.Threading.CancellationToken cancellationToken = default)
+        public async Task<IGetFormsApiResponse?> GetFormsOrDefaultAsync(Option<int> page = default, Option<int> perPage = default, Option<string> orderBy = default, Option<string> orderDirection = default, Option<string> search = default, System.Threading.CancellationToken cancellationToken = default)
         {
             try
             {
-                return await GetFormsAsync(page, perPage, cancellationToken).ConfigureAwait(false);
+                return await GetFormsAsync(page, perPage, orderBy, orderDirection, search, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception)
             {
@@ -2487,15 +2864,20 @@ namespace PDFGeneratorAPI.Client.Api
         /// <exception cref="ApiException">Thrown when fails to make API call</exception>
         /// <param name="page">Pagination: page to return (optional, default to 1)</param>
         /// <param name="perPage">Pagination: How many records to return per page (optional, default to 15)</param>
+        /// <param name="orderBy">Field to sort the forms by (optional, default to id)</param>
+        /// <param name="orderDirection">Sort direction (optional, default to desc)</param>
+        /// <param name="search">Returns forms whose name or ID contains the search value (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns><see cref="Task"/>&lt;<see cref="IGetFormsApiResponse"/>&gt;</returns>
-        public async Task<IGetFormsApiResponse> GetFormsAsync(Option<int> page = default, Option<int> perPage = default, System.Threading.CancellationToken cancellationToken = default)
+        public async Task<IGetFormsApiResponse> GetFormsAsync(Option<int> page = default, Option<int> perPage = default, Option<string> orderBy = default, Option<string> orderDirection = default, Option<string> search = default, System.Threading.CancellationToken cancellationToken = default)
         {
             UriBuilder uriBuilderLocalVar = new UriBuilder();
 
             try
             {
-                FormatGetForms(ref page, ref perPage);
+                ValidateGetForms(orderBy, orderDirection, search);
+
+                FormatGetForms(ref page, ref perPage, ref orderBy, ref orderDirection, ref search);
 
                 using (HttpRequestMessage httpRequestMessageLocalVar = new HttpRequestMessage())
                 {
@@ -2513,6 +2895,15 @@ namespace PDFGeneratorAPI.Client.Api
 
                     if (perPage.IsSet)
                         parseQueryStringLocalVar["per_page"] = ClientUtils.ParameterToString(perPage.Value);
+
+                    if (orderBy.IsSet)
+                        parseQueryStringLocalVar["order_by"] = ClientUtils.ParameterToString(orderBy.Value);
+
+                    if (orderDirection.IsSet)
+                        parseQueryStringLocalVar["order_direction"] = ClientUtils.ParameterToString(orderDirection.Value);
+
+                    if (search.IsSet)
+                        parseQueryStringLocalVar["search"] = ClientUtils.ParameterToString(search.Value);
 
                     uriBuilderLocalVar.Query = parseQueryStringLocalVar.ToString();
 
@@ -2546,7 +2937,7 @@ namespace PDFGeneratorAPI.Client.Api
 
                         GetFormsApiResponse apiResponseLocalVar = new(apiResponseLoggerLocalVar, httpRequestMessageLocalVar, httpResponseMessageLocalVar, responseContentLocalVar, "/forms", requestedAtLocalVar, _jsonSerializerOptions);
 
-                        AfterGetFormsDefaultImplementation(apiResponseLocalVar, page, perPage);
+                        AfterGetFormsDefaultImplementation(apiResponseLocalVar, page, perPage, orderBy, orderDirection, search);
 
                         Events.ExecuteOnGetForms(apiResponseLocalVar);
 
@@ -2560,7 +2951,7 @@ namespace PDFGeneratorAPI.Client.Api
             }
             catch(Exception e)
             {
-                OnErrorGetFormsDefaultImplementation(e, "/forms", uriBuilderLocalVar.Path, page, perPage);
+                OnErrorGetFormsDefaultImplementation(e, "/forms", uriBuilderLocalVar.Path, page, perPage, orderBy, orderDirection, search);
                 Events.ExecuteOnErrorGetForms(e);
                 throw;
             }
@@ -2969,7 +3360,7 @@ namespace PDFGeneratorAPI.Client.Api
         partial void OnErrorImportForm(ref bool suppressDefaultLogLocalVar, Exception exceptionLocalVar, string pathFormatLocalVar, string pathLocalVar, ImportFormRequest importFormRequest);
 
         /// <summary>
-        /// Import Form Creates a new form based on editable PDF
+        /// Import Form Creates a new form based on editable PDF. Form fields are created from the editable fields of the PDF. The optional &#x60;form&#x60; object sets the form name, template, actions and configuration.
         /// </summary>
         /// <param name="importFormRequest">Import editable PDF via URL or base64 string as form</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2987,7 +3378,7 @@ namespace PDFGeneratorAPI.Client.Api
         }
 
         /// <summary>
-        /// Import Form Creates a new form based on editable PDF
+        /// Import Form Creates a new form based on editable PDF. Form fields are created from the editable fields of the PDF. The optional &#x60;form&#x60; object sets the form name, template, actions and configuration.
         /// </summary>
         /// <exception cref="ApiException">Thrown when fails to make API call</exception>
         /// <param name="importFormRequest">Import editable PDF via URL or base64 string as form</param>
@@ -3577,38 +3968,38 @@ namespace PDFGeneratorAPI.Client.Api
             partial void OnCreated(global::System.Net.Http.HttpRequestMessage httpRequestMessage, System.Net.Http.HttpResponseMessage httpResponseMessage);
 
             /// <summary>
-            /// Returns true if the response is 201 Created
+            /// Returns true if the response is 200 Ok
             /// </summary>
             /// <returns></returns>
-            public bool IsCreated => 201 == (int)StatusCode;
+            public bool IsOk => 200 == (int)StatusCode;
 
             /// <summary>
-            /// Deserializes the response if the response is 201 Created
+            /// Deserializes the response if the response is 200 Ok
             /// </summary>
             /// <returns></returns>
-            public PDFGeneratorAPI.Client.Model.InlineObject22? Created()
+            public PDFGeneratorAPI.Client.Model.InlineObject22? Ok()
             {
                 // This logic may be modified with the AsModel.mustache template
-                return IsCreated
+                return IsOk
                     ? System.Text.Json.JsonSerializer.Deserialize<PDFGeneratorAPI.Client.Model.InlineObject22>(RawContent, _jsonSerializerOptions)
                     : null;
             }
 
             /// <summary>
-            /// Returns true if the response is 201 Created and the deserialized response is not null
+            /// Returns true if the response is 200 Ok and the deserialized response is not null
             /// </summary>
             /// <param name="result"></param>
             /// <returns></returns>
-            public bool TryCreated([NotNullWhen(true)]out PDFGeneratorAPI.Client.Model.InlineObject22? result)
+            public bool TryOk([NotNullWhen(true)]out PDFGeneratorAPI.Client.Model.InlineObject22? result)
             {
                 result = null;
 
                 try
                 {
-                    result = Created();
+                    result = Ok();
                 } catch (Exception e)
                 {
-                    OnDeserializationErrorDefaultImplementation(e, (HttpStatusCode)201);
+                    OnDeserializationErrorDefaultImplementation(e, (HttpStatusCode)200);
                 }
 
                 return result != null;
@@ -4061,38 +4452,38 @@ namespace PDFGeneratorAPI.Client.Api
             partial void OnCreated(global::System.Net.Http.HttpRequestMessage httpRequestMessage, System.Net.Http.HttpResponseMessage httpResponseMessage);
 
             /// <summary>
-            /// Returns true if the response is 201 Created
+            /// Returns true if the response is 200 Ok
             /// </summary>
             /// <returns></returns>
-            public bool IsCreated => 201 == (int)StatusCode;
+            public bool IsOk => 200 == (int)StatusCode;
 
             /// <summary>
-            /// Deserializes the response if the response is 201 Created
+            /// Deserializes the response if the response is 200 Ok
             /// </summary>
             /// <returns></returns>
-            public PDFGeneratorAPI.Client.Model.InlineObject22? Created()
+            public PDFGeneratorAPI.Client.Model.InlineObject22? Ok()
             {
                 // This logic may be modified with the AsModel.mustache template
-                return IsCreated
+                return IsOk
                     ? System.Text.Json.JsonSerializer.Deserialize<PDFGeneratorAPI.Client.Model.InlineObject22>(RawContent, _jsonSerializerOptions)
                     : null;
             }
 
             /// <summary>
-            /// Returns true if the response is 201 Created and the deserialized response is not null
+            /// Returns true if the response is 200 Ok and the deserialized response is not null
             /// </summary>
             /// <param name="result"></param>
             /// <returns></returns>
-            public bool TryCreated([NotNullWhen(true)]out PDFGeneratorAPI.Client.Model.InlineObject22? result)
+            public bool TryOk([NotNullWhen(true)]out PDFGeneratorAPI.Client.Model.InlineObject22? result)
             {
                 result = null;
 
                 try
                 {
-                    result = Created();
+                    result = Ok();
                 } catch (Exception e)
                 {
-                    OnDeserializationErrorDefaultImplementation(e, (HttpStatusCode)201);
+                    OnDeserializationErrorDefaultImplementation(e, (HttpStatusCode)200);
                 }
 
                 return result != null;

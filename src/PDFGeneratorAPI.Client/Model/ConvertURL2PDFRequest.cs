@@ -4,7 +4,7 @@
  *
  * # Introduction [PDF Generator API](https://pdfgeneratorapi.com) allows you easily generate transactional PDF documents and reduce the development and support costs by enabling your users to create and manage their document templates using a browser-based drag-and-drop document editor.  The PDF Generator API features a web API architecture, allowing you to code in the language of your choice. This API supports the JSON media type, and uses UTF-8 character encoding.  ## Base URL The base URL for all the API endpoints is `https://us1.pdfgeneratorapi.com/api/v4`  For example * `https://us1.pdfgeneratorapi.com/api/v4/templates` * `https://us1.pdfgeneratorapi.com/api/v4/workspaces` * `https://us1.pdfgeneratorapi.com/api/v4/templates/123123`  ## Editor PDF Generator API comes with a powerful drag & drop editor that allows to create any kind of document templates, from barcode labels to invoices, quotes and reports. You can find tutorials and videos from our [Support Portal](https://support.pdfgeneratorapi.com). * [Component specification](https://support.pdfgeneratorapi.com/en/category/components-1ffseaj/) * [Expression Language documentation](https://support.pdfgeneratorapi.com/en/category/expression-language-q203pa/) * [Frequently asked questions and answers](https://support.pdfgeneratorapi.com/en/category/qanda-1ov519d/)  ## Definitions  ### Organization Organization is a group of workspaces owned by your account.  ### Workspace Workspace contains templates. Each workspace has access to their own templates and organization default templates.  ### Master Workspace Master Workspace is the main/default workspace of your Organization. The Master Workspace identifier is the email you signed up with.  ### Default Template Default template is a template that is available for all workspaces by default. You can set the template access type under Page Setup. If template has \"Organization\" access then your users can use them from the \"New\" menu in the Editor.  ### Data Field Data Field is a placeholder for the specific data in your JSON data set. In this example JSON you can access the buyer name using Data Field `{paymentDetails::buyerName}`. The separator between depth levels is :: (two colons). When designing the template you don’t have to know every Data Field, our editor automatically extracts all the available fields from your data set and provides an easy way to insert them into the template. ``` {     \"documentNumber\": 1,     \"paymentDetails\": {         \"method\": \"Credit Card\",         \"buyerName\": \"John Smith\"     },     \"items\": [         {             \"id\": 1,             \"name\": \"Item one\"         }     ] } ```  ## Rate limiting Our API endpoints use IP-based rate limiting and allow you to make up to 2 requests per second and 60 requests per minute. If you make more requests, you will receive a response with HTTP code 429.  Response headers contain additional values:  | Header   | Description                    | |- -- -- -- -|- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -| | X-RateLimit-Limit    | Maximum requests per minute                   | | X-RateLimit-Remaining    | The requests remaining in the current minute               | | Retry-After     | How many seconds you need to wait until you are allowed to make requests |  *  *  *  *  *  # Libraries and SDKs ## Postman Collection We have created a [Postman Collection](https://www.postman.com/pdfgeneratorapi/workspace/pdf-generator-api-public-workspace/overview) so you can easily test all the API endpoints without developing and code.   ## Client Libraries All our Client Libraries are auto-generated using [OpenAPI Generator](https://openapi-generator.tech/) which uses the OpenAPI v3 specification to automatically generate a client library in specific programming language.  * [PHP Client](https://github.com/pdfgeneratorapi/php-client) * [Java Client](https://github.com/pdfgeneratorapi/java-client) * [Ruby Client](https://github.com/pdfgeneratorapi/ruby-client) * [Python Client](https://github.com/pdfgeneratorapi/python-client) * [Javascript Client](https://github.com/pdfgeneratorapi/javascript-client)  We have validated the generated libraries, but let us know if you find any anomalies in the client code.  ## Model Context Protocol (MCP) Server Integrate document generation directly into your AI agents and LLM applications using our official Model Context Protocol (MCP) Server.  The MCP server provides a standardized interface that allows AI assistants (like Claude Desktop and other MCP-compatible clients) to securely interact with the PDF Generator API. With it, your AI applications can automatically fetch workspaces, retrieve templates, merge data, and generate PDF documents on the fly.  [Get PDF Generator API MCP Server](https://github.com/pdfgeneratorapi/mcp-server) *  *  *  *  *   # Authentication The PDF Generator API uses __JSON Web Tokens (JWT)__ to authenticate all API requests. These tokens offer a method to establish secure server-to-server authentication by transferring a compact JSON object with a signed payload of your account’s API Key and Secret. When authenticating to the PDF Generator API, a JWT should be generated uniquely by a __server-side application__ and included as a __Bearer Token__ in the header of each request.   <SecurityDefinitions />  ## Accessing your API Key and Secret You can find your __API Key__ and __API Secret__ from the __Account Settings__ page after you login to PDF Generator API [here](https://pdfgeneratorapi.com/login).  ## Creating a JWT JSON Web Tokens are composed of three sections: a header, a payload (containing a claim set), and a signature. The header and payload are JSON objects, which are serialized to UTF-8 bytes, then encoded using base64url encoding.  The JWT's header, payload, and signature are concatenated with periods (.). As a result, a JWT typically takes the following form: ``` {Base64url encoded header}.{Base64url encoded payload}.{Base64url encoded signature} ```  We recommend and support libraries provided on [jwt.io](https://jwt.io/). While other libraries can create JWT, these recommended libraries are the most robust.  ### Header Property `alg` defines which signing algorithm is being used. PDF Generator API users HS256. Property `typ` defines the type of token and it is always JWT. ``` {   \"alg\": \"HS256\",   \"typ\": \"JWT\" } ```  ### Payload The second part of the token is the payload, which contains the claims  or the pieces of information being passed about the user and any metadata required. It is mandatory to specify the following claims: * issuer (`iss`): Your API key * subject (`sub`): Workspace identifier * expiration time (`exp`): Timestamp (unix epoch time) until the token is valid. It is highly recommended to set the exp timestamp for a short period, i.e. a matter of seconds. This way, if a token is intercepted or shared, the token will only be valid for a short period of time.  ``` {   \"iss\": \"ad54aaff89ffdfeff178bb8a8f359b29fcb20edb56250b9f584aa2cb0162ed4a\",   \"sub\": \"demo.example@actualreports.com\",   \"exp\": 1586112639 } ```  ### Payload for Partners Our partners can send their unique identifier (provided by us) in JWT's partner_id claim. If the `partner_id` value is specified in the JWT, the organization making the request is automatically connected to the partner account. * Partner ID (`partner_id`): Unique identifier provide by PDF Generator API team  ``` {   \"iss\": \"ad54aaff89ffdfeff178bb8a8f359b29fcb20edb56250b9f584aa2cb0162ed4a\",   \"sub\": \"demo.example@actualreports.com\",   \"partner_id\": \"my-partner-identifier\",   \"exp\": 1586112639 } ```  ### Signature To create the signature part you have to take the encoded header, the encoded payload, a secret, the algorithm specified in the header, and sign that. The signature is used to verify the message wasn't changed along the way, and, in the case of tokens signed with a private key, it can also verify that the sender of the JWT is who it says it is. ``` HMACSHA256(     base64UrlEncode(header) + \".\" +     base64UrlEncode(payload),     API_SECRET) ```  ### Putting all together The output is three Base64-URL strings separated by dots. The following shows a JWT that has the previous header and payload encoded, and it is signed with a secret. ``` eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhZDU0YWFmZjg5ZmZkZmVmZjE3OGJiOGE4ZjM1OWIyOWZjYjIwZWRiNTYyNTBiOWY1ODRhYTJjYjAxNjJlZDRhIiwic3ViIjoiZGVtby5leGFtcGxlQGFjdHVhbHJlcG9ydHMuY29tIn0.SxO-H7UYYYsclS8RGWO1qf0z1cB1m73wF9FLl9RCc1Q  // Base64 encoded header: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9 // Base64 encoded payload: eyJpc3MiOiJhZDU0YWFmZjg5ZmZkZmVmZjE3OGJiOGE4ZjM1OWIyOWZjYjIwZWRiNTYyNTBiOWY1ODRhYTJjYjAxNjJlZDRhIiwic3ViIjoiZGVtby5leGFtcGxlQGFjdHVhbHJlcG9ydHMuY29tIn0 // Signature: SxO-H7UYYYsclS8RGWO1qf0z1cB1m73wF9FLl9RCc1Q ```  ## Temporary JWTs You can create a temporary token in [Account Settings](https://pdfgeneratorapi.com/account/organization) page after you login to PDF Generator API. The generated token uses your email address as the subject (`sub`) value and is valid for __15 minutes__. You can also use [jwt.io](https://jwt.io/) to generate test tokens for your API calls. These test tokens should never be used in production applications. *  *  *  *  *  # Error codes  | Code   | Description                    | |- -- -- -- -|- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -| | 401    | Unauthorized                   | | 402    | Payment Required               | | 403    | Forbidden                      | | 404    | Not Found                      | | 422    | Unprocessable Entity           | | 429    | Too Many Requests              | | 500    | Internal Server Error          |  ## 401 Unauthorized | Description                                                             | |- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --| | Authentication failed: request expired                                  | | Authentication failed: workspace missing                                | | Authentication failed: key missing                                      | | Authentication failed: property 'iss' (issuer) missing in JWT           | | Authentication failed: property 'sub' (subject) missing in JWT          | | Authentication failed: property 'exp' (expiration time) missing in JWT  | | Authentication failed: incorrect signature                              |  ## 402 Payment Required | Description                                                             | |- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --| | Your account is suspended, please upgrade your account                  |  ## 403 Forbidden | Description                                                             | |- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --| | Your account has exceeded the monthly document generation limit.        | | Access not granted: You cannot delete master workspace via API          | | Access not granted: Template is not accessible by this organization     | | Your session has expired, please close and reopen the editor.           |  ## 404 Entity not found | Description                                                             | |- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --| | Entity not found                                                        | | Resource not found                                                      | | None of the templates is available for the workspace.                   |  ## 422 Unprocessable Entity | Description                                                             | |- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --| | Unable to parse JSON, please check formatting                           | | Required parameter missing                                              | | Required parameter missing: template definition not defined             | | Required parameter missing: template not defined                        |  ## 429 Too Many Requests | Description                                                             | |- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --| | You can make up to 2 requests per second and 60 requests per minute.   |  *  *  *  *  * 
  *
- * The version of the OpenAPI document: 4.0.29
+ * The version of the OpenAPI document: 4.0.31
  * Contact: support@pdfgeneratorapi.com
  * Generated by: https://github.com/openapitools/openapi-generator.git
  */
@@ -39,14 +39,24 @@ namespace PDFGeneratorAPI.Client.Model
         /// <param name="orientation">orientation (default to OrientationEnum.Portrait)</param>
         /// <param name="output">Output (default to OutputEnum.Base64)</param>
         /// <param name="filename">Document name</param>
+        /// <param name="waitForCss">CSS selector of an element to wait for before the page is printed; see &#x60;wait_for_css_state&#x60;</param>
+        /// <param name="waitForCssState">How &#x60;wait_for_css&#x60; matches. &#x60;present&#x60; waits until the element exists, even if it is empty or hidden (e.g. a &#x60;&lt;div id&#x3D;\&quot;report-ready\&quot;&gt;&lt;/div&gt;&#x60; marker); &#x60;visible&#x60; waits until it is also visible with a non-empty size (e.g. a chart that appears when data has loaded). (default to WaitForCssStateEnum.Present)</param>
+        /// <param name="waitForJs">JavaScript expression evaluated in the page every 100ms; the page is printed once it is truthy. Promises are awaited, and an expression that throws counts as not ready yet.</param>
+        /// <param name="waitTimeout">Seconds to wait for &#x60;wait_for_css&#x60; / &#x60;wait_for_js&#x60; before applying &#x60;on_wait_timeout&#x60; (default to 30)</param>
+        /// <param name="onWaitTimeout">What to do when the wait signal is not met within &#x60;wait_timeout&#x60;. &#x60;error&#x60; returns a 422 response; &#x60;print&#x60; prints the page as it is. (default to OnWaitTimeoutEnum.Error)</param>
         [JsonConstructor]
-        public ConvertURL2PDFRequest(Option<string?> url = default, Option<PaperSizeEnum?> paperSize = default, Option<OrientationEnum?> orientation = default, Option<OutputEnum?> output = default, Option<string?> filename = default)
+        public ConvertURL2PDFRequest(Option<string?> url = default, Option<PaperSizeEnum?> paperSize = default, Option<OrientationEnum?> orientation = default, Option<OutputEnum?> output = default, Option<string?> filename = default, Option<string?> waitForCss = default, Option<WaitForCssStateEnum?> waitForCssState = default, Option<string?> waitForJs = default, Option<int?> waitTimeout = default, Option<OnWaitTimeoutEnum?> onWaitTimeout = default)
         {
             UrlOption = url;
             PaperSizeOption = paperSize;
             OrientationOption = orientation;
             OutputOption = output;
             FilenameOption = filename;
+            WaitForCssOption = waitForCss;
+            WaitForCssStateOption = waitForCssState;
+            WaitForJsOption = waitForJs;
+            WaitTimeoutOption = waitTimeout;
+            OnWaitTimeoutOption = onWaitTimeout;
             OnCreated();
         }
 
@@ -381,6 +391,170 @@ namespace PDFGeneratorAPI.Client.Model
         public OutputEnum? Output { get { return this.OutputOption; } set { this.OutputOption = new(value); } }
 
         /// <summary>
+        /// How &#x60;wait_for_css&#x60; matches. &#x60;present&#x60; waits until the element exists, even if it is empty or hidden (e.g. a &#x60;&lt;div id&#x3D;\&quot;report-ready\&quot;&gt;&lt;/div&gt;&#x60; marker); &#x60;visible&#x60; waits until it is also visible with a non-empty size (e.g. a chart that appears when data has loaded).
+        /// </summary>
+        /// <value>How &#x60;wait_for_css&#x60; matches. &#x60;present&#x60; waits until the element exists, even if it is empty or hidden (e.g. a &#x60;&lt;div id&#x3D;\&quot;report-ready\&quot;&gt;&lt;/div&gt;&#x60; marker); &#x60;visible&#x60; waits until it is also visible with a non-empty size (e.g. a chart that appears when data has loaded).</value>
+        public enum WaitForCssStateEnum
+        {
+            /// <summary>
+            /// Enum Present for value: present
+            /// </summary>
+            Present = 1,
+
+            /// <summary>
+            /// Enum Visible for value: visible
+            /// </summary>
+            Visible = 2
+        }
+
+        /// <summary>
+        /// Returns a <see cref="WaitForCssStateEnum"/>
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public static WaitForCssStateEnum WaitForCssStateEnumFromString(string value)
+        {
+            if (value.Equals("present"))
+                return WaitForCssStateEnum.Present;
+
+            if (value.Equals("visible"))
+                return WaitForCssStateEnum.Visible;
+
+            throw new NotImplementedException($"Could not convert value to type WaitForCssStateEnum: '{value}'");
+        }
+
+        /// <summary>
+        /// Returns a <see cref="WaitForCssStateEnum"/>
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static WaitForCssStateEnum? WaitForCssStateEnumFromStringOrDefault(string value)
+        {
+            if (value.Equals("present"))
+                return WaitForCssStateEnum.Present;
+
+            if (value.Equals("visible"))
+                return WaitForCssStateEnum.Visible;
+
+            return null;
+        }
+
+        /// <summary>
+        /// Converts the <see cref="WaitForCssStateEnum"/> to the json value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public static string WaitForCssStateEnumToJsonValue(WaitForCssStateEnum? value)
+        {
+            if (value == WaitForCssStateEnum.Present)
+                return "present";
+
+            if (value == WaitForCssStateEnum.Visible)
+                return "visible";
+
+            throw new NotImplementedException($"Value could not be handled: '{value}'");
+        }
+
+        /// <summary>
+        /// Used to track the state of WaitForCssState
+        /// </summary>
+        [JsonIgnore]
+        [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never)]
+        public Option<WaitForCssStateEnum?> WaitForCssStateOption { get; private set; }
+
+        /// <summary>
+        /// How &#x60;wait_for_css&#x60; matches. &#x60;present&#x60; waits until the element exists, even if it is empty or hidden (e.g. a &#x60;&lt;div id&#x3D;\&quot;report-ready\&quot;&gt;&lt;/div&gt;&#x60; marker); &#x60;visible&#x60; waits until it is also visible with a non-empty size (e.g. a chart that appears when data has loaded).
+        /// </summary>
+        /// <value>How &#x60;wait_for_css&#x60; matches. &#x60;present&#x60; waits until the element exists, even if it is empty or hidden (e.g. a &#x60;&lt;div id&#x3D;\&quot;report-ready\&quot;&gt;&lt;/div&gt;&#x60; marker); &#x60;visible&#x60; waits until it is also visible with a non-empty size (e.g. a chart that appears when data has loaded).</value>
+        /* <example>present</example> */
+        [JsonPropertyName("wait_for_css_state")]
+        public WaitForCssStateEnum? WaitForCssState { get { return this.WaitForCssStateOption; } set { this.WaitForCssStateOption = new(value); } }
+
+        /// <summary>
+        /// What to do when the wait signal is not met within &#x60;wait_timeout&#x60;. &#x60;error&#x60; returns a 422 response; &#x60;print&#x60; prints the page as it is.
+        /// </summary>
+        /// <value>What to do when the wait signal is not met within &#x60;wait_timeout&#x60;. &#x60;error&#x60; returns a 422 response; &#x60;print&#x60; prints the page as it is.</value>
+        public enum OnWaitTimeoutEnum
+        {
+            /// <summary>
+            /// Enum Error for value: error
+            /// </summary>
+            Error = 1,
+
+            /// <summary>
+            /// Enum Print for value: print
+            /// </summary>
+            Print = 2
+        }
+
+        /// <summary>
+        /// Returns a <see cref="OnWaitTimeoutEnum"/>
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public static OnWaitTimeoutEnum OnWaitTimeoutEnumFromString(string value)
+        {
+            if (value.Equals("error"))
+                return OnWaitTimeoutEnum.Error;
+
+            if (value.Equals("print"))
+                return OnWaitTimeoutEnum.Print;
+
+            throw new NotImplementedException($"Could not convert value to type OnWaitTimeoutEnum: '{value}'");
+        }
+
+        /// <summary>
+        /// Returns a <see cref="OnWaitTimeoutEnum"/>
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static OnWaitTimeoutEnum? OnWaitTimeoutEnumFromStringOrDefault(string value)
+        {
+            if (value.Equals("error"))
+                return OnWaitTimeoutEnum.Error;
+
+            if (value.Equals("print"))
+                return OnWaitTimeoutEnum.Print;
+
+            return null;
+        }
+
+        /// <summary>
+        /// Converts the <see cref="OnWaitTimeoutEnum"/> to the json value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public static string OnWaitTimeoutEnumToJsonValue(OnWaitTimeoutEnum? value)
+        {
+            if (value == OnWaitTimeoutEnum.Error)
+                return "error";
+
+            if (value == OnWaitTimeoutEnum.Print)
+                return "print";
+
+            throw new NotImplementedException($"Value could not be handled: '{value}'");
+        }
+
+        /// <summary>
+        /// Used to track the state of OnWaitTimeout
+        /// </summary>
+        [JsonIgnore]
+        [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never)]
+        public Option<OnWaitTimeoutEnum?> OnWaitTimeoutOption { get; private set; }
+
+        /// <summary>
+        /// What to do when the wait signal is not met within &#x60;wait_timeout&#x60;. &#x60;error&#x60; returns a 422 response; &#x60;print&#x60; prints the page as it is.
+        /// </summary>
+        /// <value>What to do when the wait signal is not met within &#x60;wait_timeout&#x60;. &#x60;error&#x60; returns a 422 response; &#x60;print&#x60; prints the page as it is.</value>
+        /* <example>error</example> */
+        [JsonPropertyName("on_wait_timeout")]
+        public OnWaitTimeoutEnum? OnWaitTimeout { get { return this.OnWaitTimeoutOption; } set { this.OnWaitTimeoutOption = new(value); } }
+
+        /// <summary>
         /// Used to track the state of Url
         /// </summary>
         [JsonIgnore]
@@ -411,6 +585,51 @@ namespace PDFGeneratorAPI.Client.Model
         public string? Filename { get { return this.FilenameOption; } set { this.FilenameOption = new(value); } }
 
         /// <summary>
+        /// Used to track the state of WaitForCss
+        /// </summary>
+        [JsonIgnore]
+        [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never)]
+        public Option<string?> WaitForCssOption { get; private set; }
+
+        /// <summary>
+        /// CSS selector of an element to wait for before the page is printed; see &#x60;wait_for_css_state&#x60;
+        /// </summary>
+        /// <value>CSS selector of an element to wait for before the page is printed; see &#x60;wait_for_css_state&#x60;</value>
+        /* <example>#report-ready</example> */
+        [JsonPropertyName("wait_for_css")]
+        public string? WaitForCss { get { return this.WaitForCssOption; } set { this.WaitForCssOption = new(value); } }
+
+        /// <summary>
+        /// Used to track the state of WaitForJs
+        /// </summary>
+        [JsonIgnore]
+        [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never)]
+        public Option<string?> WaitForJsOption { get; private set; }
+
+        /// <summary>
+        /// JavaScript expression evaluated in the page every 100ms; the page is printed once it is truthy. Promises are awaited, and an expression that throws counts as not ready yet.
+        /// </summary>
+        /// <value>JavaScript expression evaluated in the page every 100ms; the page is printed once it is truthy. Promises are awaited, and an expression that throws counts as not ready yet.</value>
+        /* <example>window.renderComplete &#x3D;&#x3D;&#x3D; true</example> */
+        [JsonPropertyName("wait_for_js")]
+        public string? WaitForJs { get { return this.WaitForJsOption; } set { this.WaitForJsOption = new(value); } }
+
+        /// <summary>
+        /// Used to track the state of WaitTimeout
+        /// </summary>
+        [JsonIgnore]
+        [global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never)]
+        public Option<int?> WaitTimeoutOption { get; private set; }
+
+        /// <summary>
+        /// Seconds to wait for &#x60;wait_for_css&#x60; / &#x60;wait_for_js&#x60; before applying &#x60;on_wait_timeout&#x60;
+        /// </summary>
+        /// <value>Seconds to wait for &#x60;wait_for_css&#x60; / &#x60;wait_for_js&#x60; before applying &#x60;on_wait_timeout&#x60;</value>
+        /* <example>30</example> */
+        [JsonPropertyName("wait_timeout")]
+        public int? WaitTimeout { get { return this.WaitTimeoutOption; } set { this.WaitTimeoutOption = new(value); } }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -423,6 +642,11 @@ namespace PDFGeneratorAPI.Client.Model
             sb.Append("  Orientation: ").Append(Orientation).Append("\n");
             sb.Append("  Output: ").Append(Output).Append("\n");
             sb.Append("  Filename: ").Append(Filename).Append("\n");
+            sb.Append("  WaitForCss: ").Append(WaitForCss).Append("\n");
+            sb.Append("  WaitForCssState: ").Append(WaitForCssState).Append("\n");
+            sb.Append("  WaitForJs: ").Append(WaitForJs).Append("\n");
+            sb.Append("  WaitTimeout: ").Append(WaitTimeout).Append("\n");
+            sb.Append("  OnWaitTimeout: ").Append(OnWaitTimeout).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -434,6 +658,30 @@ namespace PDFGeneratorAPI.Client.Model
         /// <returns>Validation Result</returns>
         IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
         {
+            // WaitForCss (string) maxLength
+            if (this.WaitForCss != null && this.WaitForCss.Length > 100)
+            {
+                yield return new ValidationResult("Invalid value for WaitForCss, length must be less than 100.", new [] { "WaitForCss" });
+            }
+
+            // WaitForJs (string) maxLength
+            if (this.WaitForJs != null && this.WaitForJs.Length > 200)
+            {
+                yield return new ValidationResult("Invalid value for WaitForJs, length must be less than 200.", new [] { "WaitForJs" });
+            }
+
+            // WaitTimeout (int) maximum
+            if (this.WaitTimeoutOption.IsSet && this.WaitTimeoutOption.Value > (int)60)
+            {
+                yield return new ValidationResult("Invalid value for WaitTimeout, must be a value less than or equal to 60.", new [] { "WaitTimeout" });
+            }
+
+            // WaitTimeout (int) minimum
+            if (this.WaitTimeoutOption.IsSet && this.WaitTimeoutOption.Value < (int)1)
+            {
+                yield return new ValidationResult("Invalid value for WaitTimeout, must be a value greater than or equal to 1.", new [] { "WaitTimeout" });
+            }
+
             yield break;
         }
     }
@@ -465,6 +713,11 @@ namespace PDFGeneratorAPI.Client.Model
             Option<ConvertURL2PDFRequest.OrientationEnum?> orientation = default;
             Option<ConvertURL2PDFRequest.OutputEnum?> output = default;
             Option<string?> filename = default;
+            Option<string?> waitForCss = default;
+            Option<ConvertURL2PDFRequest.WaitForCssStateEnum?> waitForCssState = default;
+            Option<string?> waitForJs = default;
+            Option<int?> waitTimeout = default;
+            Option<ConvertURL2PDFRequest.OnWaitTimeoutEnum?> onWaitTimeout = default;
 
             while (utf8JsonReader.Read())
             {
@@ -502,6 +755,25 @@ namespace PDFGeneratorAPI.Client.Model
                         case "filename":
                             filename = new Option<string?>(utf8JsonReader.GetString()!);
                             break;
+                        case "wait_for_css":
+                            waitForCss = new Option<string?>(utf8JsonReader.GetString()!);
+                            break;
+                        case "wait_for_css_state":
+                            string? waitForCssStateRawValue = utf8JsonReader.GetString();
+                            if (waitForCssStateRawValue != null)
+                                waitForCssState = new Option<ConvertURL2PDFRequest.WaitForCssStateEnum?>(ConvertURL2PDFRequest.WaitForCssStateEnumFromStringOrDefault(waitForCssStateRawValue));
+                            break;
+                        case "wait_for_js":
+                            waitForJs = new Option<string?>(utf8JsonReader.GetString()!);
+                            break;
+                        case "wait_timeout":
+                            waitTimeout = new Option<int?>(utf8JsonReader.TokenType == JsonTokenType.Null ? (int?)null : utf8JsonReader.GetInt32());
+                            break;
+                        case "on_wait_timeout":
+                            string? onWaitTimeoutRawValue = utf8JsonReader.GetString();
+                            if (onWaitTimeoutRawValue != null)
+                                onWaitTimeout = new Option<ConvertURL2PDFRequest.OnWaitTimeoutEnum?>(ConvertURL2PDFRequest.OnWaitTimeoutEnumFromStringOrDefault(onWaitTimeoutRawValue));
+                            break;
                         default:
                             break;
                     }
@@ -523,7 +795,22 @@ namespace PDFGeneratorAPI.Client.Model
             if (filename.IsSet && filename.Value == null)
                 throw new ArgumentNullException(nameof(filename), "Property is not nullable for class ConvertURL2PDFRequest.");
 
-            return new ConvertURL2PDFRequest(url, paperSize, orientation, output, filename);
+            if (waitForCss.IsSet && waitForCss.Value == null)
+                throw new ArgumentNullException(nameof(waitForCss), "Property is not nullable for class ConvertURL2PDFRequest.");
+
+            if (waitForCssState.IsSet && waitForCssState.Value == null)
+                throw new ArgumentNullException(nameof(waitForCssState), "Property is not nullable for class ConvertURL2PDFRequest.");
+
+            if (waitForJs.IsSet && waitForJs.Value == null)
+                throw new ArgumentNullException(nameof(waitForJs), "Property is not nullable for class ConvertURL2PDFRequest.");
+
+            if (waitTimeout.IsSet && waitTimeout.Value == null)
+                throw new ArgumentNullException(nameof(waitTimeout), "Property is not nullable for class ConvertURL2PDFRequest.");
+
+            if (onWaitTimeout.IsSet && onWaitTimeout.Value == null)
+                throw new ArgumentNullException(nameof(onWaitTimeout), "Property is not nullable for class ConvertURL2PDFRequest.");
+
+            return new ConvertURL2PDFRequest(url, paperSize, orientation, output, filename, waitForCss, waitForCssState, waitForJs, waitTimeout, onWaitTimeout);
         }
 
         /// <summary>
@@ -556,6 +843,12 @@ namespace PDFGeneratorAPI.Client.Model
             if (convertURL2PDFRequest.FilenameOption.IsSet && convertURL2PDFRequest.Filename == null)
                 throw new ArgumentNullException(nameof(convertURL2PDFRequest.Filename), "Property is required for class ConvertURL2PDFRequest.");
 
+            if (convertURL2PDFRequest.WaitForCssOption.IsSet && convertURL2PDFRequest.WaitForCss == null)
+                throw new ArgumentNullException(nameof(convertURL2PDFRequest.WaitForCss), "Property is required for class ConvertURL2PDFRequest.");
+
+            if (convertURL2PDFRequest.WaitForJsOption.IsSet && convertURL2PDFRequest.WaitForJs == null)
+                throw new ArgumentNullException(nameof(convertURL2PDFRequest.WaitForJs), "Property is required for class ConvertURL2PDFRequest.");
+
             if (convertURL2PDFRequest.UrlOption.IsSet)
                 writer.WriteString("url", convertURL2PDFRequest.Url);
 
@@ -567,6 +860,20 @@ namespace PDFGeneratorAPI.Client.Model
             writer.WriteString("output", outputRawValue);
             if (convertURL2PDFRequest.FilenameOption.IsSet)
                 writer.WriteString("filename", convertURL2PDFRequest.Filename);
+
+            if (convertURL2PDFRequest.WaitForCssOption.IsSet)
+                writer.WriteString("wait_for_css", convertURL2PDFRequest.WaitForCss);
+
+            var waitForCssStateRawValue = ConvertURL2PDFRequest.WaitForCssStateEnumToJsonValue(convertURL2PDFRequest.WaitForCssStateOption.Value!.Value);
+            writer.WriteString("wait_for_css_state", waitForCssStateRawValue);
+            if (convertURL2PDFRequest.WaitForJsOption.IsSet)
+                writer.WriteString("wait_for_js", convertURL2PDFRequest.WaitForJs);
+
+            if (convertURL2PDFRequest.WaitTimeoutOption.IsSet)
+                writer.WriteNumber("wait_timeout", convertURL2PDFRequest.WaitTimeoutOption.Value!.Value);
+
+            var onWaitTimeoutRawValue = ConvertURL2PDFRequest.OnWaitTimeoutEnumToJsonValue(convertURL2PDFRequest.OnWaitTimeoutOption.Value!.Value);
+            writer.WriteString("on_wait_timeout", onWaitTimeoutRawValue);
         }
     }
 }
