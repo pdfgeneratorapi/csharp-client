@@ -1,5 +1,5 @@
 # PDFGeneratorAPI.Client.Model.FormActionStore
-Key-value pair of action configuration.
+Saves the generated document to Document Storage.
 
 ## Properties
 

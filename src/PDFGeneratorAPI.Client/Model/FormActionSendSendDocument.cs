@@ -34,7 +34,7 @@ namespace PDFGeneratorAPI.Client.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="FormActionSendSendDocument" /> class.
         /// </summary>
-        /// <param name="url">URL where the generated document will be delivered. Must use HTTPS.</param>
+        /// <param name="url">URL that receives the submitted answers as JSON, and the generated document when the form also stores it. Must use HTTPS.</param>
         /// <param name="headers">Optional HTTP headers to include with the delivery request.</param>
         [JsonConstructor]
         public FormActionSendSendDocument(string url, Option<List<FormActionSendSendDocumentHeadersInner>?> headers = default)
@@ -47,9 +47,9 @@ namespace PDFGeneratorAPI.Client.Model
         partial void OnCreated();
 
         /// <summary>
-        /// URL where the generated document will be delivered. Must use HTTPS.
+        /// URL that receives the submitted answers as JSON, and the generated document when the form also stores it. Must use HTTPS.
         /// </summary>
-        /// <value>URL where the generated document will be delivered. Must use HTTPS.</value>
+        /// <value>URL that receives the submitted answers as JSON, and the generated document when the form also stores it. Must use HTTPS.</value>
         /* <example>https://example.com/webhook</example> */
         [JsonPropertyName("url")]
         public string Url { get; set; }

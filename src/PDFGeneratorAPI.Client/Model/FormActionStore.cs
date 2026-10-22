@@ -27,7 +27,7 @@ using PDFGeneratorAPI.Client.Client;
 namespace PDFGeneratorAPI.Client.Model
 {
     /// <summary>
-    /// Key-value pair of action configuration.
+    /// Saves the generated document to Document Storage.
     /// </summary>
     public partial class FormActionStore : IValidatableObject
     {
