@@ -257,7 +257,7 @@ namespace PDFGeneratorAPI.Client.Api
         /// Update template
         /// </summary>
         /// <remarks>
-        /// Updates template configuration. The template configuration for pages and layout must be complete as the entire configuration is replaced and not merged.
+        /// Updates template configuration. Each top-level field sent (name, layout, pages and the rest) replaces the stored one, so pages must be complete, with every component.
         /// </remarks>
         /// <exception cref="ApiException">Thrown when fails to make API call</exception>
         /// <param name="templateId">Template unique identifier</param>
@@ -270,7 +270,7 @@ namespace PDFGeneratorAPI.Client.Api
         /// Update template
         /// </summary>
         /// <remarks>
-        /// Updates template configuration. The template configuration for pages and layout must be complete as the entire configuration is replaced and not merged.
+        /// Updates template configuration. Each top-level field sent (name, layout, pages and the rest) replaces the stored one, so pages must be complete, with every component.
         /// </remarks>
         /// <param name="templateId">Template unique identifier</param>
         /// <param name="templateDefinitionNew">Template configuration</param>
@@ -5504,7 +5504,7 @@ namespace PDFGeneratorAPI.Client.Api
         partial void OnErrorUpdateTemplate(ref bool suppressDefaultLogLocalVar, Exception exceptionLocalVar, string pathFormatLocalVar, string pathLocalVar, int templateId, TemplateDefinitionNew templateDefinitionNew);
 
         /// <summary>
-        /// Update template Updates template configuration. The template configuration for pages and layout must be complete as the entire configuration is replaced and not merged.
+        /// Update template Updates template configuration. Each top-level field sent (name, layout, pages and the rest) replaces the stored one, so pages must be complete, with every component.
         /// </summary>
         /// <param name="templateId">Template unique identifier</param>
         /// <param name="templateDefinitionNew">Template configuration</param>
@@ -5523,7 +5523,7 @@ namespace PDFGeneratorAPI.Client.Api
         }
 
         /// <summary>
-        /// Update template Updates template configuration. The template configuration for pages and layout must be complete as the entire configuration is replaced and not merged.
+        /// Update template Updates template configuration. Each top-level field sent (name, layout, pages and the rest) replaces the stored one, so pages must be complete, with every component.
         /// </summary>
         /// <exception cref="ApiException">Thrown when fails to make API call</exception>
         /// <param name="templateId">Template unique identifier</param>

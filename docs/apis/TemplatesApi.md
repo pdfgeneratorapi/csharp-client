@@ -406,7 +406,7 @@ Returns an unique URL which you can use to redirect your user to the editor from
 
 Update template
 
-Updates template configuration. The template configuration for pages and layout must be complete as the entire configuration is replaced and not merged.
+Updates template configuration. Each top-level field sent (name, layout, pages and the rest) replaces the stored one, so pages must be complete, with every component.
 
 
 ### Parameters

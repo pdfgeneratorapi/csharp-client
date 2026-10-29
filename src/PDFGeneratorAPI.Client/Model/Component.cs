@@ -137,39 +137,44 @@ namespace PDFGeneratorAPI.Client.Model
             RectangleComponent = 14,
 
             /// <summary>
+            /// Enum EllipseComponent for value: ellipseComponent
+            /// </summary>
+            EllipseComponent = 15,
+
+            /// <summary>
             /// Enum VlineComponent for value: vlineComponent
             /// </summary>
-            VlineComponent = 15,
+            VlineComponent = 16,
 
             /// <summary>
             /// Enum HlineComponent for value: hlineComponent
             /// </summary>
-            HlineComponent = 16,
+            HlineComponent = 17,
 
             /// <summary>
             /// Enum PagenumberComponent for value: pagenumberComponent
             /// </summary>
-            PagenumberComponent = 17,
+            PagenumberComponent = 18,
 
             /// <summary>
             /// Enum SymbolComponent for value: symbolComponent
             /// </summary>
-            SymbolComponent = 18,
+            SymbolComponent = 19,
 
             /// <summary>
             /// Enum CheckboxComponent for value: checkboxComponent
             /// </summary>
-            CheckboxComponent = 19,
+            CheckboxComponent = 20,
 
             /// <summary>
             /// Enum RadioComponent for value: radioComponent
             /// </summary>
-            RadioComponent = 20,
+            RadioComponent = 21,
 
             /// <summary>
             /// Enum SignatureComponent for value: signatureComponent
             /// </summary>
-            SignatureComponent = 21
+            SignatureComponent = 22
         }
 
         /// <summary>
@@ -221,6 +226,9 @@ namespace PDFGeneratorAPI.Client.Model
 
             if (value.Equals("rectangleComponent"))
                 return ClsEnum.RectangleComponent;
+
+            if (value.Equals("ellipseComponent"))
+                return ClsEnum.EllipseComponent;
 
             if (value.Equals("vlineComponent"))
                 return ClsEnum.VlineComponent;
@@ -295,6 +303,9 @@ namespace PDFGeneratorAPI.Client.Model
             if (value.Equals("rectangleComponent"))
                 return ClsEnum.RectangleComponent;
 
+            if (value.Equals("ellipseComponent"))
+                return ClsEnum.EllipseComponent;
+
             if (value.Equals("vlineComponent"))
                 return ClsEnum.VlineComponent;
 
@@ -368,6 +379,9 @@ namespace PDFGeneratorAPI.Client.Model
 
             if (value == ClsEnum.RectangleComponent)
                 return "rectangleComponent";
+
+            if (value == ClsEnum.EllipseComponent)
+                return "ellipseComponent";
 
             if (value == ClsEnum.VlineComponent)
                 return "vlineComponent";
